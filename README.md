@@ -1,43 +1,41 @@
 ### Methods
 
-## Prepend
+## Prepend(data)
+-Adds
+## Append(data)
 
-## Append
+## PrintList()
 
-## PrintList
+## IndexData(index)
 
-## IndexData
+## IndexInsert(index,data)
 
-## IndexInsert
+## DeleteIndex(index)
 
-## DeleteIndex
+## convert_to_list()
 
-## convert_to_list
+## MapFunction(func,*args)
 
-## MapFunction
+## ProtectedMapFunction(func,*args)
 
-## ProtectedMapFunction
+## IndexOf(data)
 
-## IndexOf
+## contains(data)
 
-## contains
+## isEmpty()
 
-## isEmpty
-
-## clear
+## clear()
 
 ### TO BE ADDED
 
-## Filter
+## Filter(func,*args)
 
-## LastIndexOf
+## RemoveLast()
 
-## RemoveLast
-
-## RemoveFirst
+## RemoveFirst()
 
 ## RemoveData(data,type)
-# types:
+types:
 1. All occurences
 2. First Occurence
 3. Last Occurence
