@@ -170,4 +170,36 @@ class linked_list():
             finally:
                 current_node = current_node.next
         return "success"
-print ("Hello World, that now has a new script on linked list implementation")
+    def IndexOf(self,data):
+        """
+        Returns index of first occurence in list
+        """
+        if self.length == 0:
+            return "List Empty"
+        current_node = self.head.next
+        counter = 0
+        while current_node != None and current_node.data != data:
+            counter += 1
+            current_node = current_node.next
+        if current_node == None:
+            return "Data Not Found In List"
+        return counter
+    def contains(self,data):
+        if self.length == 0:
+            return False
+        current_node = self.head.next
+        while current_node != None and current_node.data != data:
+            current_node = current_node.next
+        if current_node == None:
+            return False
+        return True
+    def isEmpty(self):
+        if self.length == 0:
+            return True
+        else:
+            return False
+    def clear(self):
+        self.head.next = None
+        self.length = 0
+
+pass
