@@ -52,29 +52,6 @@ class linked_list():
             return current_node.data
         else:
             return "Index Not Found"
-    def deleteIndex(self,index):
-        try:
-            index = int(index)
-        except:
-            return "index input error"
-        else:
-            if index < 0:
-                return "index input error"
-        if self.head.next == None:
-            return "List is Empty!"
-        current_node = self.head.next
-        previous_node = self.head
-        #loop to find given index
-        counter = 0
-        while counter < index and current_node.next != None:
-            counter += 1
-            previous_node = current_node
-            current_node = current_node.next
-        if counter == index: #current node found
-            previous_node.next = current_node.next
-            self.length -= 1
-        else:
-            "Index Not Found"
     def IndexInsert(self,index,data):
         try:
             index = int(index)
