@@ -151,7 +151,7 @@ class linked_list():
             current_node.data = func(current_node.data,*args)
             current_node = current_node.next
         return "success"
-    def ProtectedmapFunction(self,func,*args):
+    def ProtectedMapFunction(self,func,*args):
         """
         *args include function object and any associated *args
         *changes are directly applied to each object in linked list
@@ -170,4 +170,4 @@ class linked_list():
             finally:
                 current_node = current_node.next
         return "success"
-ll = linked_list()
+print ("Hello World, that now has a new script on linked list implementation")
