@@ -201,3 +201,5 @@ class linked_list():
     def clear(self):
         self.head.next = None
         self.length = 0
+
+pass
