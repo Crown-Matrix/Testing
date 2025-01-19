@@ -1,4 +1,3 @@
-import math
 class node():
     def __init__(self,data,next=None):
         self.data = data
@@ -130,6 +129,10 @@ class linked_list():
         self.length -= 1
         return "success"
     def convert_to_list(self):
+        """
+        returns a list containing elements of linked list
+        returns empty list if linked list is empty
+        """
         result = []
         current_node = self.head.next
         while current_node != None:
