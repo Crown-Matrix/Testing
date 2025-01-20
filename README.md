@@ -45,22 +45,23 @@ Protected means if any exception is rasied while running the given function with
 # **TO BE ADDED**
 
 ### Filter(func,*args)
+Iterates through linked list running given function with each node as input.
+function should output True/False and will keep/delete a node in accordance.
 
-### RemoveLast()
-
+### RemoveLast(data)
+Deletes last item in list
 ### RemoveFirst()
-
+Removes first item in list
 ### RemoveData(data,type)
-#### Types:
-##### 1. All occurences
-##### 2. First Occurence
-##### 3. Last Occurence
+Types:
+1. All occurences
+2. First Occurence
+3. Last Occurence
 
 ### Iterator()
 returns generator object
 
 ### IndexOf(data,type)
-#### Types:
-##### 1. First Occurence
-##### 2. Last Occurence
-
+Types:
+1. First Occurence
+2. Last Occurence
