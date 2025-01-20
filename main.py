@@ -34,13 +34,10 @@ class linked_list():
         if current_node == None:
             print ("List Empty")
             return
-        while current_node.next != None:
-            print (current_node.data,"->")
+        while current_node != None:
+            print (current_node.data)
             current_node = current_node.next
-        print (f"{current_node.data}")
-        #at this point current_node = last node
     def IndexData(self,index):
-        
         if self.head.next == None:
             return "list is empty"
         current_node = self.head.next #starting at first real node to preserve 0-based indexing
@@ -82,29 +79,25 @@ class linked_list():
         return "Success"
     def deleteIndex(self,index):
         try:
-            input = int(input)
+            index = int(index)
         except:
             return "index input error"
         else:
             if index < 0:
                 return "index input error"
-        current_node = self.head.next
-        if current_node == None:
-            return "List is Empty"
-        if index == 0:
-            self.head.next = current_node.next
-            self.length -= 1
-            return "index 0 case (success)"
-        counter = 0
-        while counter < index -1 and self.head.next != None:
+        if self.head.next == None:
+            return "Empty List"
+        current_node = self.head
+        counter = -1
+        while counter < index and current_node.next != None:
             counter += 1
+            previous_node = current_node
             current_node = current_node.next
-        if current_node.next == None and counter != index:
-            return "Index Error: Index exceeds list range"
-        #current_node = node before deleted index
-        current_node.next = current_node.next.next
-        self.length -= 1
-        return "success"
+        if current_node.next != None and counter != index:
+            return "Index Error: index exceeds list range"
+        previous_node.next = current_node.next
+        return "Success"
+        previous_node.next = current_node.next
     def convert_to_list(self):
         """
         returns a list containing elements of linked list
