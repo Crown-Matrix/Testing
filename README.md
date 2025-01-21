@@ -46,6 +46,10 @@ Method:
 ### clear()
 -Disconnects all nodes from head node
 
+### length()
+-Returns length of linked list
+-Return 0 if empty
+
 ### RemoveLast()
 -Deletes last item in list
 -Returns data in the last item as a result
@@ -100,6 +104,5 @@ Methods:
 3. Last Occurence (returns index)
 
 # **TO BE ADDED**
-
-### iterator()
--Returns iterable class object containing all items in linked_list at the time of method call
+iterator():
+-Returns iterable object class containing all __*current*__ values in list

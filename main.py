@@ -7,19 +7,16 @@ class node():
 class linked_list():
     def __init__(self):
         self.head = node(data=None)
-        self.length = 0
     def append(self,data):
         new_node = node(data=data)
         current_node = self.head
         if self.head.next == None:
             self.head.next = new_node
-            self.length += 1
             return
         while current_node.next != None:
             current_node = current_node.next
         #at this point current_node = last node
         current_node.next = new_node
-        self.length += 1
     
 
     
@@ -27,7 +24,6 @@ class linked_list():
         new_node = node(data=data)
         new_node.next = self.head.next
         self.head.next = new_node
-        self.length += 1
     
     def printList(self):
         current_node = self.head.next
@@ -64,7 +60,6 @@ class linked_list():
         if self.head.next == None:
             if index == 0:
                 self.head.next = node(data=data)
-                self.length += 1
                 return
             else:
                 return "Index Error: Empty List"
@@ -75,7 +70,6 @@ class linked_list():
             return "IndexError: Given Index Exceeds List Range"
         replaced_node = current_node.next
         current_node.next = node(data=data,next=replaced_node)
-        self.length += 1
         return "Success"
     def deleteIndex(self,index):
         try:
@@ -148,7 +142,7 @@ class linked_list():
         2. Last Occurence
         3. All Occurences (returns list)
         """
-        if self.length == 0:
+        if self.head.next == None:
             return "List Empty"
         match method:
             case 1:
@@ -192,7 +186,7 @@ class linked_list():
                 return "Input Error: Given type must be 1 or 2"
         
     def contains(self,data):
-        if self.length == 0:
+        if self.head.next == None:
             return False
         current_node = self.head.next
         while current_node != None and current_node.data != data:
@@ -201,13 +195,12 @@ class linked_list():
             return False
         return True
     def isEmpty(self):
-        if self.length == 0:
+        if self.head.next == None:
             return True
         else:
             return False
     def clear(self):
         self.head.next = None
-        self.length = 0
     def RemoveLast(self):
         """
         Deletes last item in list
@@ -412,6 +405,13 @@ class linked_list():
                     counter += 1
                 current_match.data = new_data
                 return current_counter
+    def length(self):
+        current_node = self.head.next
+        counter = 0
+        while current_node != None:
+            counter += 1
+            current_node = current_node.next
+        return counter
     #def iterator(self):
         #current_node = self.head.next
         #while current_node != None:
