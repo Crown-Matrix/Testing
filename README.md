@@ -8,6 +8,7 @@
 
 ### PrintList()
 -Prints List Out
+
 -(line by line for each node)
 
 ### IndexData(index)
@@ -24,7 +25,9 @@
 
 ### MapFunction(func,*args)
 -for each item linked list, runs given function with the item as the main parameter
---Allows for more than 1 parameters
+
+-Allows for more than 1 parameters
+
 (only the first(main) parameter will be set to each item in the list)
 
 ### ProtectedMapFunction(func,*args)
@@ -48,31 +51,43 @@ Method:
 
 ### length()
 -Returns length of linked list
--Return 0 if empty
+
+-Returns 0 if empty
 
 ### RemoveLast()
 -Deletes last item in list
+
 -Returns data in the last item as a result
+
 -Returns error if list is empty
 
 ### RemoveFirst()
 -Removes first item in list
+
 -Removes data of first item
+
 -Returns an error if list is empty
 
 ### RemoveData(data,method)
 -Removes occuence(s) of nodes with the given data in accordance to the specific type.
--Method:
+
+-Methods:
 1. All occurences
 2. First Occurence
 3. Last Occurence
+
 -Returns index of occurence(s) as result
+
 -Returns "data not found in list" when no occurences found
 
 ### Filter(func,*args)
 -Iterates through linked list running given function with each node as input.
+
 -Function should output True/False and will keep/delete a node in accordance.
+
 -Returns index list of nodes removed
+
+**Example:**
 ```python
 def CheckIfFactor(num,factor):
     if num%factor == 0:
@@ -81,6 +96,7 @@ def CheckIfFactor(num,factor):
         return False
 ll.Filter(CheckIfFactor,3)
 #will only keep numbers dividable by 3
+
 #any that arent will be removed from list
 ```
 
@@ -90,7 +106,11 @@ ll.Filter(CheckIfFactor,3)
 ```python
 a_regular_list = [1,2,3]    
 a_linked_list = (linked_list.CreateFromList([a_regular_list]))
-#the original regular list variable still exists, but the second variable has been assigned a new instance of the linked_list class with 1,2,3 as its first 3 values.
+#the first variable still exists
+
+#the second variable is a new instance of the linked_list class
+
+# the new instance contains 1,2,3 as its first 3 values.
 ```
 
 ### ReplaceIndex(index,data)
@@ -98,6 +118,7 @@ a_linked_list = (linked_list.CreateFromList([a_regular_list]))
 
 ### ReplaceData(old_data,new_data,method)
 -Replaces the nodes at specficiced occurence(determined by method) with a new node containing the given data
+
 Methods:
 1. All Occurences (returns list of occurence indexes)
 2. First Occurence (returns index)
