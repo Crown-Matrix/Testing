@@ -140,20 +140,57 @@ class linked_list():
             finally:
                 current_node = current_node.next
         return "success"
-    def IndexOf(self,data):
+    def IndexOf(self,data,method):
         """
-        Returns index of first occurence in list
+        Returns index of occurence(s) in list
+        Types:
+        1. First Occurence
+        2. Last Occurence
+        3. All Occurences (returns list)
         """
         if self.length == 0:
             return "List Empty"
-        current_node = self.head.next
-        counter = 0
-        while current_node != None and current_node.data != data:
-            counter += 1
-            current_node = current_node.next
-        if current_node == None:
-            return "Data Not Found In List"
-        return counter
+        match method:
+            case 1:
+                current_node = self.head.next
+                counter = 0
+                while current_node != None and current_node.data != data:
+                    counter += 1
+                    current_node = current_node.next
+                if current_node == None:
+                    return "Data Not Found In List"
+                return counter
+            case 2:
+                if self.head.next == None:
+                    return "List Empty"
+                current_node = self.head.next
+                counter = 0
+                indexes = []
+                while current_node != None: 
+                    if current_node.data == data:
+                        indexes.append(counter)
+                    counter += 1
+                    current_node = current_node.next
+                try:
+                    return indexes[-1]
+                except IndexError:
+                    return "Data not in list"
+                
+            case 3:
+                if self.head.next == None:
+                    return "List Empty"
+                current_node = self.head.next
+                counter = 0
+                indexes = []
+                while current_node != None: 
+                    if current_node.data == data:
+                        indexes.append(counter)
+                    counter += 1
+                    current_node = current_node.next
+                return indexes
+            case _:
+                return "Input Error: Given type must be 1 or 2"
+        
     def contains(self,data):
         if self.length == 0:
             return False
@@ -171,5 +208,119 @@ class linked_list():
     def clear(self):
         self.head.next = None
         self.length = 0
+    def RemoveLast(self):
+        """
+        Deletes last item in list
+        Returns data in last item as result
+        Will return error if List is empty
+        """
+        current_node = self.head.next
+        if current_node == None:
+            return "List Empty Error"
+        while current_node.next != None:
+            previous_node = current_node
+            current_node = current_node.next
+        previous_node.next = None
+        return current_node.data
+    def RemoveFirst(self):
+        """
+        Removes first item in list
+        Returns data of first item
+        Returns an error if list is empty
+        """
+        current_node = self.head.next
+        if current_node == None:
+            return "List Empty Error"
+                
+        self.head.next = None if current_node.next == None else current_node.next
+        return current_node.data
+    def RemoveData(self,data,method=1):
+        """
+        -Removes Occurence(s) of data in list depending on selected method
+        Methods:
+        1. All Occurences
+        2. First Occurence
+        3. Last Occurence
+        Default method is #1
+        Returns index of occurence(s) as result
+        Returns "data not found in list" when no occurences found
+        """
+        match method:
+            case 1:
+                current_node = self.head.next
+                previous_node = self.head
+                applicable = False
+                counter = 0
+                indexes = []
+                while current_node != None:
+                    if current_node.data == data:
+                        previous_node.next = current_node.next #deleter
+                        current_node = current_node.next
+                        indexes.append(counter)
+                        applicable = True
+                    else:
+                        previous_node = current_node
+                        current_node = current_node.next
+                    counter += 1
+                if applicable:
+                    return indexes
+                return "data not found in list"
+    
+            case 2:
+                current_node = self.head.next
+                previous_node = self.head
+                counter = 0
+                while current_node != None:
+                    if current_node.data == data:
+                        previous_node.next = current_node.next #deleter
+                        return counter
+                    #if not a match continue updating variables
+                    counter += 1
+                    previous_node = current_node
+                    current_node = current_node.next
+                return "data not found in list"
 
+            case 3:
+                current_node = self.head.next
+                previous_node = self.head
+                counter = 0
+                applicable = False
+                while current_node != None:
+                    if current_node.data == data:
+                        #overwrite last match info with latest match info
+                        current_match = current_node
+                        previous_match = previous_node
+                        counter_match = counter
+                        applicable = True
+                    counter += 1
+                    previous_node = current_node
+                    current_node = current_node.next
+                if applicable:
+                    previous_match.next = current_match.next #deleter
+                    return counter_match
+                return "data not found in list"
+            case _:
+                return "Input Error: Not valid method"
+    def Filter(self,func,*args):
+        current_node = self.head.next
+        previous_node = self.head
+        counter = 0
+        indexes = []
+        applicable = False
+        while current_node != None:
+            match func(current_node.data,*args):
+                case True:
+                    previous_node = current_node
+                    current_node = current_node.next
+                case False:
+                    previous_node.next = current_node.next
+                    current_node = current_node.next
+                    indexes.append(counter)
+                    applicable = True
+                case _:
+                    return f"FUNCTION ERROR: Given function did not output True/False after inputting the node at index {counter} with data {current_node.data}"
+            counter += 1
+        if applicable:
+            return indexes
+        return "success"
 pass

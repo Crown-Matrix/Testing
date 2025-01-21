@@ -28,10 +28,14 @@
 (only the first(main) parameter will be set to each item in the list)
 
 ### ProtectedMapFunction(func,*args)
-Protected means if any exception is rasied while running the given function with an item in the list, the exception will be ignored and continue looping through the list running the function on all items
+-Protected means if any exception is rasied while running the given function with an item in the list, the exception will be ignored and continue looping through the list running the function on all items
 
-### IndexOf(data)
--Returns index of first occurence of given data in linked list
+### IndexOf(data,method)
+Returns index of occurence(s) of nodes with the given data.
+Method:
+1. First Occurence
+2. Last Occurence
+3. All Occurences (returns list)
 
 ### contains(data)
 -Returns True/False for if the given data is within any of the nodes in the linked list
@@ -42,26 +46,54 @@ Protected means if any exception is rasied while running the given function with
 ### clear()
 -Disconnects all nodes from head node
 
-# **TO BE ADDED**
+### RemoveLast()
+-Deletes last item in list
+-Returns data in the last item as a result
+-Returns error if list is empty
 
-### Filter(func,*args)
-Iterates through linked list running given function with each node as input.
-function should output True/False and will keep/delete a node in accordance.
-
-### RemoveLast(data)
-Deletes last item in list
 ### RemoveFirst()
-Removes first item in list
-### RemoveData(data,type)
-Types:
+-Removes first item in list
+-Removes data of first item
+-Returns an error if list is empty
+
+### RemoveData(data,method)
+-Removes occuence(s) of nodes with the given data in accordance to the specific type.
+-Method:
 1. All occurences
 2. First Occurence
 3. Last Occurence
+Returns index of occurence(s) as result
+Returns "data not found in list" when no occurences found
+
+### Filter(func,*args)
+-Iterates through linked list running given function with each node as input.
+-Function should output True/False and will keep/delete a node in accordance.
+-Returns index list of nodes removed
+```python
+def CheckIfFactor(num,factor):
+    if num%factor == 0:
+        return True
+    else:
+        return False
+ll.Filter(CheckIfFactor,3)
+#will only keep numbers dividable by 3
+#any that arent will be removed from list
+```
+
+# **TO BE ADDED**
 
 ### Iterator()
-returns generator object
+-returns iterable object containing current(at time of method call) items in linked list
 
-### IndexOf(data,type)
-Types:
-1. First Occurence
-2. Last Occurence
+### ReplaceIndex(index,data)
+replaces the node at the given index with a new node containing the given data
+
+### ReplaceData(index,old_data,new_data,method)
+Replaces the nodes at specficiced occurence(determined by method) with a new node containing the given data
+Methods:
+1. All Occurences (returns list of occurence indexes)
+2. First Occurence (returns index)
+3. Last Occurence (returns index)
+
+### CreateFromList(list)
+Returns a new linked list object with list values as node values
