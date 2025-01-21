@@ -26,7 +26,7 @@
 ### MapFunction(func,*args)
 -for each item linked list, runs given function with the item as the main parameter
 
--Allows for more than 1 parameters
+-Allows for more than one parameter
 
 (only the first(main) parameter will be set to each item in the list)
 
@@ -126,4 +126,5 @@ Methods:
 
 # **TO BE ADDED**
 iterator():
+
 -Returns iterable object class containing all __*current*__ values in list

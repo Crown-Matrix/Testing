@@ -341,8 +341,8 @@ class linked_list():
             if index < 0:
                 return "Index Input Error"
         counter = 0
-        current_node = self.head.next
         previous_node = self.head
+        current_node = previous_node.next
         while counter != index and current_node.next != None:
             counter += 1
             previous_node = current_node
@@ -409,7 +409,7 @@ class linked_list():
         current_node = self.head.next
         counter = 0
         while current_node != None:
-            counter += 1
+            counter += 1 #counter at beginning of loop for 1-based indexing
             current_node = current_node.next
         return counter
     #def iterator(self):
