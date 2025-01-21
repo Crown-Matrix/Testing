@@ -31,7 +31,7 @@
 -Protected means if any exception is rasied while running the given function with an item in the list, the exception will be ignored and continue looping through the list running the function on all items
 
 ### IndexOf(data,method)
-Returns index of occurence(s) of nodes with the given data.
+-Returns index of occurence(s) of nodes with the given data.
 Method:
 1. First Occurence
 2. Last Occurence
@@ -62,8 +62,8 @@ Method:
 1. All occurences
 2. First Occurence
 3. Last Occurence
-Returns index of occurence(s) as result
-Returns "data not found in list" when no occurences found
+-Returns index of occurence(s) as result
+-Returns "data not found in list" when no occurences found
 
 ### Filter(func,*args)
 -Iterates through linked list running given function with each node as input.
@@ -80,20 +80,26 @@ ll.Filter(CheckIfFactor,3)
 #any that arent will be removed from list
 ```
 
-# **TO BE ADDED**
+### CreateFromList(list)
+-Returns a new linked list object with list values as node values
 
-### Iterator()
--returns iterable object containing current(at time of method call) items in linked list
+```python
+a_regular_list = [1,2,3]    
+a_linked_list = (linked_list.CreateFromList([a_regular_list]))
+#the original regular list variable still exists, but the second variable has been assigned a new instance of the linked_list class with 1,2,3 as its first 3 values.
+```
 
 ### ReplaceIndex(index,data)
-replaces the node at the given index with a new node containing the given data
+-Replaces the node at the given index with a new node containing the given data
 
-### ReplaceData(index,old_data,new_data,method)
-Replaces the nodes at specficiced occurence(determined by method) with a new node containing the given data
+### ReplaceData(old_data,new_data,method)
+-Replaces the nodes at specficiced occurence(determined by method) with a new node containing the given data
 Methods:
 1. All Occurences (returns list of occurence indexes)
 2. First Occurence (returns index)
 3. Last Occurence (returns index)
 
-### CreateFromList(list)
-Returns a new linked list object with list values as node values
+# **TO BE ADDED**
+
+### iterator()
+-Returns iterable class object containing all items in linked_list at the time of method call

@@ -6,7 +6,7 @@ class node():
         
 class linked_list():
     def __init__(self):
-        self.head = node(data=None,next=None)
+        self.head = node(data=None)
         self.length = 0
     def append(self,data):
         new_node = node(data=data)
@@ -237,13 +237,14 @@ class linked_list():
     def RemoveData(self,data,method=1):
         """
         -Removes Occurence(s) of data in list depending on selected method
-        Methods:
-        1. All Occurences
+
+        -Returns index of occurence(s) as result
+
+        Method definitions:
+        1. All Occurences(Default)
         2. First Occurence
         3. Last Occurence
-        Default method is #1
-        Returns index of occurence(s) as result
-        Returns "data not found in list" when no occurences found
+        
         """
         match method:
             case 1:
@@ -302,6 +303,11 @@ class linked_list():
             case _:
                 return "Input Error: Not valid method"
     def Filter(self,func,*args):
+        """
+        -Iterates through linked list running given function with each node as input.
+        -Function should output True/False and will keep/delete a node in accordance.
+        -Returns index list of nodes removed
+        """
         current_node = self.head.next
         previous_node = self.head
         counter = 0
@@ -323,4 +329,92 @@ class linked_list():
         if applicable:
             return indexes
         return "success"
+    def CreateFromList(given_list):
+        new_linked_list = linked_list()
+        current_node = new_linked_list.head
+        for i in given_list:
+            current_node.next = node(data=i)
+            current_node = current_node.next
+        return new_linked_list
+    def ReplaceIndex(self,index,data):
+        """
+        -Replaces the nodes at index to  be replaced by a new node with the given data
+        """
+        try:
+            index = int(index)
+        except:
+            return "Index Input Error"
+        else:
+            if index < 0:
+                return "Index Input Error"
+        counter = 0
+        current_node = self.head.next
+        previous_node = self.head
+        while counter != index and current_node.next != None:
+            counter += 1
+            previous_node = current_node
+            current_node = current_node.next
+        if counter != index:
+            return "Index Error: Given Index Exceeds List Range"
+        previous_node.next = node(data=data,next=current_node.next)
+        return counter
+    def ReplaceData(self,old_data,new_data,method):
+        """
+        -Replaces the nodes at specficiced occurence(determined by method) with a new node containing the given data
+
+        Methods:
+        1. All Occurences (returns list of occurence indexes)
+        2. First Occurence (returns index)
+        3. Last Occurence (returns index)
+        """
+        match method:
+            case 1:
+                if self.head.next == None:
+                    return "List Empty!"
+                current_node = self.head.next
+                previous_node = self.head
+                counter = 0
+                applicable = False
+                indexes = []
+                while current_node != None:
+                    if current_node.data == old_data:
+                        applicable = True
+                        indexes.append(counter)
+                        current_node.data = new_data
+                    previous_node = current_node
+                    current_node = current_node.next
+                    counter += 1
+                if applicable:
+                    return indexes
+                return "Data not in list"
+            case 2:
+                if self.head.next == None:
+                    return "List Empty!"
+                current_node = self.head.next
+                counter = 0
+                while current_node != None:
+                    if current_node.data == old_data:
+                        current_node.data = new_data
+                        return counter
+                    current_node = current_node.next
+                    counter += 1
+                return "data not in list"
+            case 3:
+                if self.head.next == None:
+                    return "List Empty!"
+                current_node = self.head.next
+                counter = 0
+                while current_node != None:
+                    if current_node.data == old_data:
+                        current_match = current_node
+                        current_counter = counter
+                    current_node = current_node.next
+                    counter += 1
+                current_match.data = new_data
+                return current_counter
+    #def iterator(self):
+        #current_node = self.head.next
+        #while current_node != None:
+            #yield current_node.data
+            #current_node = current_node.next
 pass
