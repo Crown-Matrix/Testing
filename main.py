@@ -16,10 +16,7 @@ class linked_list():
         while current_node.next != None:
             current_node = current_node.next
         #at this point current_node = last node
-        current_node.next = new_node
-    
-
-    
+        current_node.next = new_node  
     def prepend(self,data):
         new_node = node(data=data)
         new_node.next = self.head.next
@@ -526,9 +523,7 @@ class linked_list():
                     lowest_found_node = current_node
                 current_node = current_node.next
             lowest_found_node.data,latest_node.data = latest_node.data,lowest_found_node.data
-            latest_node = latest_node.next
-
-        
+            latest_node = latest_node.next 
     def SplitList(self,method):
         """
         Splits linked list down middle
@@ -593,11 +588,18 @@ class linked_list():
 
 
 def TimeItTests():
+    """
+    For testing sorting methods on randomly generated lists
+    
+    Generates 100 lists of 150 numbers for each sorting algorithim
+    
+    Prints results
+    """
     from random import randrange
     from timeit import timeit
     from os import system
     def randomLinkedList():
-        return linked_list.CreateFromList([randrange(0,99999999999) for i in range(300)])
+        return linked_list.CreateFromList([randrange(0,99999999999) for i in range(150)])
     def TimeChecksies():
         testee = randomLinkedList()
         testee.BubbleSort()
