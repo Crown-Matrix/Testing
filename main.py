@@ -561,11 +561,11 @@ class linked_list():
                     return new_list
                 fast_counter = first_node
                 slow_counter = first_node
-                while fast_counter != None and fast_counter.next != None: ## floor divison by 2
+                while fast_counter != None and fast_counter.next != None:
                     fast_counter = fast_counter.next.next
                     slow_counter = slow_counter.next
                 result = slow_counter.next
-                slow_counter.next = None #split the halves
+                slow_counter.next = None #disconnect the halves
                 current_node = result
                 new_list = linked_list()
                 while current_node != None:
