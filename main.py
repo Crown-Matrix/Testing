@@ -636,10 +636,6 @@ def TimeItTests(LIST_LENGTH = 150,DATA_RANGE_MINIMUM = 0, DATA_RANGE_MAXIMUM = 9
 
     For example: Set BUBBLE_SORT = False (if you dont want bubble sort to be ran)
     """
-    LIST_LENGTH = LIST_LENGTH
-    DATA_RANGE_MINIMUM = DATA_RANGE_MINIMUM
-    DATA_RANGE_MAXIMUM = DATA_RANGE_MAXIMUM
-    TEST_AMOUNT = TEST_AMOUNT #for each sorting algorithim
     from random import randrange
     from timeit import timeit
     from os import system
