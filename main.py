@@ -589,8 +589,7 @@ class linked_list():
 
 
 
-ll = linked_list.CreateFromList([1,5,2,6,5,4,10,5,2,104,23,1,9,8,3,12,13,10,5,12])
-ll.printList()
+
 
 
 def TimeItTests():
@@ -612,5 +611,5 @@ def TimeItTests():
     bannana = (timeit(stmt=TimeeeCheckser,number=100))
     orange = (timeit(stmt=TimsieesssChecka,number=100))
     system("clear")
-    print (f"Bubble Sort: {apple}(ran 100 times)\nSelection sort: {bannana}(ran 100 times)\nDefaultSort: {orange}(ran 100 times)")
+    print (f"Bubble Sort: {apple}(ran 100 times)\nSelection sort: {bannana}(ran 100 times)\nTimSort: {orange}(ran 100 times)")
 pass
