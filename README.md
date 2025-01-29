@@ -139,6 +139,7 @@ Returns linked_list object based on method
 -Sorts the linked list using the bubble_sort algorithim
 
 Info:
+    
     Average/worst time complexity: O(n^2)
 
     Best time complexity: 0(n)
@@ -149,9 +150,10 @@ Info:
 -Sorts the linked list using the selection sort algorithim
 
 Info:
-     Worst/Avg/Best time complexity: O(n^2)
      
-     Space Complexity: O(1)
+    Worst/Avg/Best time complexity: O(n^2)
+     
+    Space Complexity: O(1)
 
 ### findMax(method)
 -Returns maximum numerical value in list
