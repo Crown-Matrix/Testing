@@ -157,6 +157,7 @@ Info:
 
 ### findMax(method)
 -Returns maximum numerical value in list
+
 -if data isnt int or float then it will be ignored
 
 Methods:
@@ -184,14 +185,17 @@ Methods:
 
 ### __iter__()
 -Returns iterable generator object
+
 -linked_list object is now iterable using list(list), "for" loops, etc
 
 ### CopyList()
--"Deep" Copy method
+-Does a "Deep" Copy - This means all contained nodes are copied as well
+
 -Returns creates new linked_list instance with new node instances
 
 ### ReverseList(method=1)
 -Returns link list after reversal
+
 Methods:  (Default: 1)
 1. Return the original list in reversed form
 2. Return a reversed copy, without changing the original list
