@@ -581,37 +581,98 @@ class linked_list():
                 yield curerent_node.data
                 curerent_node = curerent_node.next
         return generator()
+    def CopyList(self):
+        new_list = linked_list()
+        for i in self:
+            new_list.append(i)
+        return new_list
+    def ReverseList(self,method=1):
+        """"
+        Returns a reversed linked list
 
+        Methods:
+        1. Directly changes the linked list instance
+        2. Creates a reversed copy of the linked list instance instead
+        """
+        match method:
+            case 1:
+                previous_node = None
+                current_node = self.head.next
+                while current_node != None:
+                    next_node = current_node.next
+                    current_node.next = previous_node
+                    previous_node = current_node
+                    current_node = next_node
+                self.head.next = previous_node
+                return self
+            case 2:
+                new_list = self.CopyList()
+                previous_node = None
+                current_node = new_list.head.next
+                while current_node != None:
+                    next_node = current_node.next
+                    current_node.next = previous_node
+                    previous_node = current_node
+                    current_node = next_node
+                new_list.head.next = previous_node
+                return new_list
+            case _:
+                return "method input error"
 
-
-
-
-
-def TimeItTests():
+def TimeItTests(LIST_LENGTH = 150,DATA_RANGE_MINIMUM = 0, DATA_RANGE_MAXIMUM = 99999999999,TEST_AMOUNT = 100,BUBBLE_SORT=True,SELECTION_SORT=True,TIM_SORT=True):
     """
-    For testing sorting methods on randomly generated lists
+    Generates random lists with defined parameters to test sorting algorithims
+    Automatically prints results after
     
-    Generates 100 lists of 150 numbers for each sorting algorithim
-    
-    Prints results
+    LIST_LENGTH - how long each list is
+
+    DATA_RANGE_MINIMUM - minimum amount for data in list
+
+    DATA_RANGE_MAXIMUM - maximum amount for data in list
+
+    TEST_AMOUNT - amount of lists created for each algorithim
+
+    Sorting algorithim name paramaeters allow the choosing of which algorithims to run
+
+    For example: Set BUBBLE_SORT = False (if you dont want bubble sort to be ran)
     """
+    LIST_LENGTH = LIST_LENGTH
+    DATA_RANGE_MINIMUM = DATA_RANGE_MINIMUM
+    DATA_RANGE_MAXIMUM = DATA_RANGE_MAXIMUM
+    TEST_AMOUNT = TEST_AMOUNT #for each sorting algorithim
     from random import randrange
     from timeit import timeit
     from os import system
     def randomLinkedList():
-        return linked_list.CreateFromList([randrange(0,99999999999) for i in range(150)])
-    def TimeChecksies():
+        return linked_list.CreateFromList([randrange(DATA_RANGE_MINIMUM,DATA_RANGE_MAXIMUM) for i in range(LIST_LENGTH)])
+    def bubbly():
         testee = randomLinkedList()
         testee.BubbleSort()
-    def TimeeeCheckser():
+    def selective():
         testee = randomLinkedList()
         testee.SelectionSort()
-    def TimsieesssChecka():
+    def timmy():
         testee = randomLinkedList()
         testee.convert_to_list().sort()
-    apple = (timeit(stmt=TimeChecksies,number=100))
-    bannana = (timeit(stmt=TimeeeCheckser,number=100))
-    orange = (timeit(stmt=TimsieesssChecka,number=100))
+
+    print ("loading...",flush=True)
+    if BUBBLE_SORT:
+        apple = (timeit(stmt=bubbly,number=TEST_AMOUNT))
+    else:
+        apple = "Not Ran"
+    
+    if SELECTION_SORT:
+        bannana = (timeit(stmt=selective,number=TEST_AMOUNT))
+    else:
+        bannana = "Not Ran"
+    if TIM_SORT:
+        orange = (timeit(stmt=timmy,number=TEST_AMOUNT))
+    else:
+        orange = "Not Ran"
     system("clear")
-    print (f"Bubble Sort: {apple}(ran 100 times)\nSelection sort: {bannana}(ran 100 times)\nTimSort: {orange}(ran 100 times)")
+    print (f"Bubble Sort: {apple}\nSelection Sort: {bannana}\nTim Sort: {orange}")
+    print (f"\nTest Information:\nDataRange:({DATA_RANGE_MINIMUM}-{DATA_RANGE_MAXIMUM})\nListLength: {LIST_LENGTH}\nTestAmount: {TEST_AMOUNT}")
+    print ("\nExtra note: TimSort converts the linked list to a regular list first then converts the list back into a linked_list)\n")
+
+"Whole lotta yap"
 pass

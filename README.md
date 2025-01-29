@@ -186,5 +186,14 @@ Methods:
 -Returns iterable generator object
 -linked_list object is now iterable using list(list), "for" loops, etc
 
+### CopyList()
+-"Deep" Copy method
+-Returns creates new linked_list instance with new node instances
+
+### ReverseList(method=1)
+-Returns link list after reversal
+Methods:  (Default: 1)
+1. Return the original list in reversed form
+2. Return a reversed copy, without changing the original list
 
 # **TO BE ADDED**
