@@ -105,7 +105,7 @@ ll.Filter(CheckIfFactor,3)
 
 ```python
 a_regular_list = [1,2,3]    
-a_linked_list = (linked_list.CreateFromList([a_regular_list]))
+a_linked_list = (linked_list.CreateFromList(a_regular_list))
 #the first variable still exists
 
 #the second variable is a new instance of the linked_list class
@@ -149,9 +149,9 @@ Info:
 -Sorts the linked list using the selection sort algorithim
 
 Info:
-     Consistent time complexity: O(n^2)
-
-    Space Complexity: O(1)
+     Worst/Avg/Best time complexity: O(n^2)
+     
+     Space Complexity: O(1)
 
 ### findMax(method)
 -Returns maximum numerical value in list
