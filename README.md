@@ -124,7 +124,65 @@ Methods:
 2. First Occurence (returns index)
 3. Last Occurence (returns index)
 
-# **TO BE ADDED**
-iterator():
+### sorter(func_key,method=1)
+-Sorts linked list using pythons built-in timsort
 
--Returns iterable object class containing all __*current*__ values in list
+-Optional func_key argument can be given a function to sort the list by.
+
+Methods(default is 1):
+1. Returns new instance of linked list with sorted data
+2. Directly changes the content of the given linked list instance
+
+Returns linked_list object based on method
+
+### BubbleSort()
+-Sorts the linked list using the bubble_sort algorithim
+
+Info:
+    Average/worst time complexity: O(n^2)
+
+    Best time complexity: 0(n)
+    
+    Space Complexity: O(1)
+
+### SelectionSort()
+-Sorts the linked list using the selection sort algorithim
+
+Info:
+     Consistent time complexity: O(n^2)
+
+    Space Complexity: O(1)
+
+### findMax(method)
+-Returns maximum numerical value in list
+-if data isnt int or float then it will be ignored
+
+Methods:
+1. return node with the max data 
+2. return the max data
+
+### findMin(method)
+-Returns maximum numerical value in list
+-if data isnt int or float then it will be ignored
+
+Methods:
+1. return node with the max data 
+2. return the max data
+
+### SplitList(method)
+-Splits linked list down middle
+
+-The original list will not be changed
+
+-If length is odd, the first half will be the bigger half
+
+Methods:
+        1: first half
+        2: second half
+
+### __iter__()
+-Returns iterable generator object
+-linked_list object is now iterable using list(list), "for" loops, etc
+
+
+# **TO BE ADDED**

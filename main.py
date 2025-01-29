@@ -412,9 +412,205 @@ class linked_list():
             counter += 1 #counter at beginning of loop for 1-based indexing
             current_node = current_node.next
         return counter
-    #def iterator(self):
-        #current_node = self.head.next
-        #while current_node != None:
-            #yield current_node.data
-            #current_node = current_node.next
+    def sorter(self,func_key=None,method=1):
+        """
+        Sorts linked list using pythons built-in timsort
+        Methods:
+        1. Returns new instance of linked list with sorted data
+        2. Directly changes the content of the given linked list instance
+        returns linked_list object based on method
+        """
+        ll_list = self.convert_to_list()
+        sorted_list = list(sorted(ll_list,key=func_key))
+        
+        match method:
+            case 1:
+                return linked_list.CreateFromList(sorted_list)
+            case 2:
+                current_node = self.head.next
+                for i in sorted_list:
+                    current_node.data = i
+                    current_node = current_node.next
+                return self
+            case _:
+                "Invalid method input"
+        
+    def BubbleSort(self):
+        """
+        linked_list sorter using bubble sort algorithin
+        (repeatingly swaps value pairs that are in wrong order)
+        """
+        pass
+        try:
+            if self.head.next.next == None:
+                return "List Empty!"
+        except:
+            return "list empty!"
+        
+        previous_node = self.head.next
+        current_node = previous_node.next
+        verified_node = previous_node
+        counter = 0
+        while True:
+            applicable = True
+            previous_node = verified_node
+            current_node = verified_node.next
+            while current_node != None:
+                if current_node.data < previous_node.data:
+                    counter += 1
+                    current_node.data,previous_node.data = previous_node.data,current_node.data
+                    previous_node = self.head.next
+                    current_node = previous_node.next #resets the algorithin back at the beginning
+                    #eventually the previous/current node will be set to the last node that was determined to not need a switch
+                    applicable = False
+                else:
+                    verified_node = previous_node
+                previous_node = previous_node.next
+                current_node = current_node.next
+            if applicable:
+                print (counter)
+                break
+    def findMin(self,method):
+            current_node = self.head.next
+            latest_node = current_node
+            while current_node != None:
+                try:
+                    current_data = float(current_node.data)
+                    if current_data < latest_node.data:
+                        latest_node = current_node
+                    current_node = current_node.next
+                except:
+                    pass
+            match method:
+                case 1: # returns node
+                    return latest_node
+                case 2: # returns node data
+                    return latest_node.data
+                case _:
+                    return "invalid method input"
+            return latest_node.data
+    def findMax(self,method):
+            current_node = self.head.next
+            latest_node = current_node
+            while current_node != None:
+                try:
+                    current_data = float(current_node.data)
+                    if current_data > latest_node.data:
+                        latest_node = current_node
+                    current_node = current_node.next
+                except:
+                    pass
+            match method:
+                case 1: #return node
+                    return latest_node
+                case 2: #return node data
+                    return latest_node.data
+                case _:
+                    return "invalid method input"
+    def SelectionSort(self):
+        """
+        Directly Changes linked_link instance using the SelectionSort Algorithim
+        
+        Doesnt Return Anything
+        """
+        if self.head.next == None:
+            return "List Empty"
+        elif self.head.next.next == None:
+            return self.head.next
+        latest_node = self.head.next
+        while latest_node != None:
+            current_node = latest_node
+            lowest_found_node = current_node
+            while current_node != None:
+                if current_node.data < lowest_found_node.data:
+                    lowest_found_node = current_node
+                current_node = current_node.next
+            lowest_found_node.data,latest_node.data = latest_node.data,lowest_found_node.data
+            latest_node = latest_node.next
+
+        
+    def SplitList(self,method):
+        """
+        Splits linked list down middle
+
+        The original list will not be changed
+
+        if length is odd, the first half will be the bigger half
+
+        Methods:
+        1: Returns new linked list object containing data from the first half
+        2: Returns new linked list object containing data from the second half
+        """
+        first_node = self.head.next
+        if first_node == None or first_node.next == None:
+            return "List Length must be at least 2!"
+        match method:
+            case 1:
+                fast_counter = self.head.next
+                slow_counter = self.head.next
+                while fast_counter != None and fast_counter.next != None and fast_counter.next.next != None: ## floor divison by 2
+                    fast_counter = fast_counter.next.next
+                    slow_counter = slow_counter.next
+                slow_counter.next = None #split the halves
+                current_node = self.head.next
+                new_list = linked_list()
+                while current_node != None:
+                    new_list.append(current_node.data)
+                    current_node = current_node.next
+                return new_list
+            case 2:
+                first_node = self.head.next
+                if first_node.next.next == None:
+                    new_list = linked_list()
+                    new_list.append(first_node.next.data)    
+                    return new_list
+                fast_counter = first_node
+                slow_counter = first_node
+                while fast_counter != None and fast_counter.next != None: ## floor divison by 2
+                    fast_counter = fast_counter.next.next
+                    slow_counter = slow_counter.next
+                result = slow_counter.next
+                slow_counter.next = None #split the halves
+                current_node = result
+                new_list = linked_list()
+                while current_node != None:
+                    new_list.append(current_node.data)
+                    current_node = current_node.next
+                return new_list
+            case _:
+                "Invalid Method Input"
+    def __iter__(self):
+        def generator():
+            curerent_node = self.head.next
+            while curerent_node != None:
+                yield curerent_node.data
+                curerent_node = curerent_node.next
+        return generator()
+
+
+
+ll = linked_list.CreateFromList([1,5,2,6,5,4,10,5,2,104,23,1,9,8,3,12,13,10,5,12])
+ll.printList()
+
+
+def TimeItTests():
+    from random import randrange
+    from timeit import timeit
+    from os import system
+    def randomLinkedList():
+        return linked_list.CreateFromList([randrange(0,99999999999) for i in range(300)])
+    def TimeChecksies():
+        testee = randomLinkedList()
+        testee.BubbleSort()
+    def TimeeeCheckser():
+        testee = randomLinkedList()
+        testee.SelectionSort()
+    def TimsieesssChecka():
+        testee = randomLinkedList()
+        testee.convert_to_list().sort()
+    apple = (timeit(stmt=TimeChecksies,number=100))
+    bannana = (timeit(stmt=TimeeeCheckser,number=100))
+    orange = (timeit(stmt=TimsieesssChecka,number=100))
+    system("clear")
+    print (f"Bubble Sort: {apple}(ran 100 times)\nSelection sort: {bannana}(ran 100 times)\nDefaultSort: {orange}(ran 100 times)")
 pass
