@@ -7,6 +7,7 @@ class node():
 class linked_list():
     def __init__(self):
         self.head = node(data=None)
+        
     def append(self,data):
         new_node = node(data=data)
         current_node = self.head
@@ -16,7 +17,8 @@ class linked_list():
         while current_node.next != None:
             current_node = current_node.next
         #at this point current_node = last node
-        current_node.next = new_node  
+        current_node.next = new_node
+        
     def prepend(self,data):
         new_node = node(data=data)
         new_node.next = self.head.next
@@ -30,6 +32,7 @@ class linked_list():
         while current_node != None:
             print (current_node.data)
             current_node = current_node.next
+            
     def IndexData(self,index):
         if self.head.next == None:
             return "list is empty"
@@ -42,6 +45,7 @@ class linked_list():
             return current_node.data
         else:
             return "Index Not Found"
+            
     def IndexInsert(self,index,data):
         try:
             index = int(index)
@@ -68,6 +72,7 @@ class linked_list():
         replaced_node = current_node.next
         current_node.next = node(data=data,next=replaced_node)
         return "Success"
+        
     def deleteIndex(self,index):
         try:
             index = int(index)
@@ -89,6 +94,7 @@ class linked_list():
         previous_node.next = current_node.next
         return "Success"
         previous_node.next = current_node.next
+        
     def convert_to_list(self):
         """
         returns a list containing elements of linked list
@@ -100,6 +106,7 @@ class linked_list():
             result.append(current_node.data)
             current_node = current_node.next
         return result
+        
     def mapFunction(self,func,*args):
         """
         *args include function object and any associated *args
@@ -112,6 +119,7 @@ class linked_list():
             current_node.data = func(current_node.data,*args)
             current_node = current_node.next
         return "success"
+        
     def ProtectedMapFunction(self,func,*args):
         """
         *args include function object and any associated *args
@@ -191,13 +199,16 @@ class linked_list():
         if current_node == None:
             return False
         return True
+        
     def isEmpty(self):
         if self.head.next == None:
             return True
         else:
             return False
+            
     def clear(self):
         self.head.next = None
+        
     def RemoveLast(self):
         """
         Deletes last item in list
@@ -212,6 +223,7 @@ class linked_list():
             current_node = current_node.next
         previous_node.next = None
         return current_node.data
+        
     def RemoveFirst(self):
         """
         Removes first item in list
@@ -224,6 +236,7 @@ class linked_list():
                 
         self.head.next = None if current_node.next == None else current_node.next
         return current_node.data
+        
     def RemoveData(self,data,method=1):
         """
         -Removes Occurence(s) of data in list depending on selected method
@@ -292,6 +305,7 @@ class linked_list():
                 return "data not found in list"
             case _:
                 return "Input Error: Not valid method"
+                
     def Filter(self,func,*args):
         """
         -Iterates through linked list running given function with each node as input.
@@ -319,6 +333,7 @@ class linked_list():
         if applicable:
             return indexes
         return "success"
+        
     def CreateFromList(given_list):
         new_linked_list = linked_list()
         current_node = new_linked_list.head
@@ -326,6 +341,7 @@ class linked_list():
             current_node.next = node(data=i)
             current_node = current_node.next
         return new_linked_list
+        
     def ReplaceIndex(self,index,data):
         """
         -Replaces the nodes at index to  be replaced by a new node with the given data
@@ -348,6 +364,7 @@ class linked_list():
             return "Index Error: Given Index Exceeds List Range"
         previous_node.next = node(data=data,next=current_node.next)
         return counter
+        
     def ReplaceData(self,old_data,new_data,method):
         """
         -Replaces the nodes at specficiced occurence(determined by method) with a new node containing the given data
@@ -402,6 +419,7 @@ class linked_list():
                     counter += 1
                 current_match.data = new_data
                 return current_counter
+                
     def length(self):
         current_node = self.head.next
         counter = 0
@@ -409,6 +427,7 @@ class linked_list():
             counter += 1 #counter at beginning of loop for 1-based indexing
             current_node = current_node.next
         return counter
+        
     def sorter(self,func_key=None,method=1):
         """
         Sorts linked list using pythons built-in timsort
@@ -465,8 +484,9 @@ class linked_list():
                 previous_node = previous_node.next
                 current_node = current_node.next
             if applicable:
-                print (counter)
+                print ("Completed in",counter,"steps")
                 break
+                
     def findMin(self,method):
             current_node = self.head.next
             latest_node = current_node
@@ -485,7 +505,7 @@ class linked_list():
                     return latest_node.data
                 case _:
                     return "invalid method input"
-            return latest_node.data
+            return latest_node.data  
     def findMax(self,method):
             current_node = self.head.next
             latest_node = current_node
@@ -503,7 +523,7 @@ class linked_list():
                 case 2: #return node data
                     return latest_node.data
                 case _:
-                    return "invalid method input"
+                    return "invalid method input"               
     def SelectionSort(self):
         """
         Directly Changes linked_link instance using the SelectionSort Algorithim
@@ -523,7 +543,7 @@ class linked_list():
                     lowest_found_node = current_node
                 current_node = current_node.next
             lowest_found_node.data,latest_node.data = latest_node.data,lowest_found_node.data
-            latest_node = latest_node.next 
+            latest_node = latest_node.next     
     def SplitList(self,method):
         """
         Splits linked list down middle
@@ -573,7 +593,7 @@ class linked_list():
                     current_node = current_node.next
                 return new_list
             case _:
-                "Invalid Method Input"
+                "Invalid Method Input"         
     def __iter__(self):
         def generator():
             curerent_node = self.head.next
@@ -640,7 +660,7 @@ def TimeItTests(LIST_LENGTH = 150,DATA_RANGE_MINIMUM = 0, DATA_RANGE_MAXIMUM = 9
     from timeit import timeit
     from os import system
     def randomLinkedList():
-        return linked_list.CreateFromList([randrange(DATA_RANGE_MINIMUM,DATA_RANGE_MAXIMUM) for i in range(LIST_LENGTH)])
+        return linked_list.CreateFromList([randrange(DATA_RANGE_MINIMUM,DATA_RANGE_MAXIMUM) for i in range(LIST_LENGTH)])    
     def bubbly():
         testee = randomLinkedList()
         testee.BubbleSort()
@@ -650,13 +670,11 @@ def TimeItTests(LIST_LENGTH = 150,DATA_RANGE_MINIMUM = 0, DATA_RANGE_MAXIMUM = 9
     def timmy():
         testee = randomLinkedList()
         testee.convert_to_list().sort()
-
     print ("loading...",flush=True)
     if BUBBLE_SORT:
         apple = (timeit(stmt=bubbly,number=TEST_AMOUNT))
     else:
         apple = "Not Ran"
-    
     if SELECTION_SORT:
         bannana = (timeit(stmt=selective,number=TEST_AMOUNT))
     else:
@@ -669,6 +687,4 @@ def TimeItTests(LIST_LENGTH = 150,DATA_RANGE_MINIMUM = 0, DATA_RANGE_MAXIMUM = 9
     print (f"Bubble Sort: {apple}\nSelection Sort: {bannana}\nTim Sort: {orange}")
     print (f"\nTest Information:\nDataRange:({DATA_RANGE_MINIMUM}-{DATA_RANGE_MAXIMUM})\nListLength: {LIST_LENGTH}\nTestAmount: {TEST_AMOUNT}")
     print ("\nExtra note: TimSort converts the linked list to a regular list first then converts the list back into a linked_list)\n")
-
-"Whole lotta yap"
 pass
