@@ -638,6 +638,67 @@ class linked_list():
                 return new_list
             case _:
                 return "method input error"
+    
+    def SortedCheck(self):
+        """
+        Returns True if sorted
+        Returns False if not sorted
+        """
+        previous_node = self.head.next
+        current_node = previous_node.next
+        while current_node != None:
+            if previous_node.data > current_node.data:
+                return False
+            previous_node = current_node
+            current_node = current_node.next
+        return True
+
+    def MergeWith(self,second_list,SortCheck=True):
+
+        if type(second_list) != linked_list:
+            return "Input Error: second_list is not a linked list!"
+        if SortCheck and ((not self.SortedCheck()) or (not second_list.SortedCheck())):
+            return "SortedCheck_Result: At least one of Lists not sorted"
+        if self.head.next == None:
+            return second_list
+        elif second_list.head.next == None:
+            return self
+        #above handles case of one of the lists being empty (will just return the other one)
+        new_list = linked_list()
+        first_current = self.head.next
+        second_current = second_list.head.next
+        while True:
+            if first_current.data < second_current.data:
+                new_list.append(first_current.data)
+                first_current = first_current.next
+            else:
+                new_list.append(second_current.data)
+                second_current = second_current.next
+            #above compares the current node data, appends lowest to new, and moves through the list that had the lowest
+            if ((first_current==None) and (second_current==None)):
+                return new_list
+            elif first_current == None:
+                #add remaing items in second list
+                while second_current != None:
+                    new_list.append(second_current.data)
+                    second_current = second_current.next
+                return new_list
+            elif second_current == None:
+                while first_current != None:
+                    new_list.append(first_current.data)
+                    first_current = first_current.next
+                return new_list
+            
+ll = linked_list.CreateFromList([0,1,4,5,6,8,10,15,270])
+other_ll = linked_list.CreateFromList([0,7,9,10,11,14,19,27,15,269])
+var = ll.MergeWith(other_ll,SortCheck=True)
+if type(var) == type("s"):
+    print (var)
+else:
+    print (var.convert_to_list())
+
+
+
 
 def TimeItTests(LIST_LENGTH = 150,DATA_RANGE_MINIMUM = 0, DATA_RANGE_MAXIMUM = 99999999999,TEST_AMOUNT = 100,BUBBLE_SORT=True,SELECTION_SORT=True,TIM_SORT=True):
     """

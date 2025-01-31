@@ -96,7 +96,6 @@ def CheckIfFactor(num,factor):
         return False
 ll.Filter(CheckIfFactor,3)
 #will only keep numbers dividable by 3
-
 #any that arent will be removed from list
 ```
 
@@ -110,7 +109,7 @@ a_linked_list = (linked_list.CreateFromList(a_regular_list))
 
 #the second variable is a new instance of the linked_list class
 
-# the new instance contains 1,2,3 as its first 3 values.
+# the new linked_list instance contains 1,2,3 as its first 3 values.
 ```
 
 ### ReplaceIndex(index,data)
@@ -129,11 +128,13 @@ Methods:
 
 -Optional func_key argument can be given a function to sort the list by.
 
+-Returns linked_list object based on method
+
 Methods(default is 1):
 1. Returns new instance of linked list with sorted data
 2. Directly changes the content of the given linked list instance
 
-Returns linked_list object based on method
+
 
 ### BubbleSort()
 -Sorts the linked list using the bubble_sort algorithim
@@ -166,7 +167,8 @@ Methods:
 
 ### findMin(method)
 -Returns maximum numerical value in list
--if data isnt int or float then it will be ignored
+
+-if data isnt integer or float then it will be ignored
 
 Methods:
 1. return node with the max data 
@@ -180,10 +182,10 @@ Methods:
 -If length is odd, the first half will be the bigger half
 
 Methods:
-        1: first half
-        2: second half
+1. Returns new linked list object containing data from the first half
+2. Returns new linked list object containing data from the second half
 
-### __iter__()
+### \_\_iter\__()
 -Returns iterable generator object
 
 -linked_list object is now iterable using list(list), "for" loops, etc
@@ -200,4 +202,35 @@ Methods:  (Default: 1)
 1. Return the original list in reversed form
 2. Return a reversed copy, without changing the original list
 
+### SortedCheck
+-Returns True if list is sorted
+
+-Returns False if list is not sorted
+
+### MergeWith(second_list,SortedCheck=True)
+-Will merge two sorted linked lists together
+
+-Lists with any non-numerical value will raise an exception
+
+-SortedCheck = True/False (Default: True)
+
+-If SortedCheck=True, will iteratively ensure that both lists are sorted, if found that one isnt sorted, will return "SortedCheck_Result: At least one of Lists not sorted" without altering the lists or raising an exception
+
+-If SortedCheck=False, will assume they are sorted, and will attempt to iteratively merge them as such. If the list wasn't sorted and the SortedCheck argument was set to false, it will work unexpectedly and result list will not be sorted
+
+
 # **TO BE ADDED**
+
+### RemoveDuplicates()
+-Removes any duplicates iteratively
+-Will keep the first occurence and remove all others
+
+### MergeSort()
+-Sorts the linked list using the merge sort algorithim
+
+Info:
+
+    Time Complexity: xx
+
+    Space Complexity: Xx
+
