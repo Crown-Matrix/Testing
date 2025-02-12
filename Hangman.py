@@ -3,9 +3,8 @@ import os
 def clear_output():
     """Clears the terminal output."""
     os.system('cls' if os.name == 'nt' else 'clear')
-
 import time
-lives_left = 6
+LIVES_LEFT = 6
 correct_indexes = []
 guessed_letters = []
 a = 0
