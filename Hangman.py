@@ -1,7 +1,7 @@
 from os import system as sys
 def clear_output():
     sys("clear")
-LIVES_LEFT = 6
+lives_left = 6
 correct_indexes = []
 guessed_letters = []
 a = 0
