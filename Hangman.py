@@ -1,9 +1,6 @@
-import os
-
+from os import system as sys
 def clear_output():
-    """Clears the terminal output."""
-    os.system('cls' if os.name == 'nt' else 'clear')
-import time
+    sys("clear")
 LIVES_LEFT = 6
 correct_indexes = []
 guessed_letters = []
