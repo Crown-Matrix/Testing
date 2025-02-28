@@ -9,8 +9,6 @@
 ### PrintList()
 -Prints List Out
 
--(line by line for each node)
-
 ### IndexData(index)
 -Retrieves the data value from the node at the given index
 
@@ -185,7 +183,7 @@ Methods:
 1. Returns new linked list object containing data from the first half
 2. Returns new linked list object containing data from the second half
 
-### \_\_iter\__()
+### \_\_iter\_\_()
 -Returns iterable generator object
 
 -linked_list object is now iterable using list(list), "for" loops, etc
@@ -202,7 +200,7 @@ Methods:  (Default: 1)
 1. Return the original list in reversed form
 2. Return a reversed copy, without changing the original list
 
-### SortedCheck
+### SortedCheck()
 -Returns True if list is sorted
 
 -Returns False if list is not sorted
@@ -212,25 +210,28 @@ Methods:  (Default: 1)
 
 -Lists with any non-numerical value will raise an exception
 
+-Returns merged COPY
+
 -SortedCheck = True/False (Default: True)
 
 -If SortedCheck=True, will iteratively ensure that both lists are sorted, if found that one isnt sorted, will return "SortedCheck_Result: At least one of Lists not sorted" without altering the lists or raising an exception
 
 -If SortedCheck=False, will assume they are sorted, and will attempt to iteratively merge them as such. If the list wasn't sorted and the SortedCheck argument was set to false, it will work unexpectedly and result list will not be sorted
 
-
-# **TO BE ADDED**
-
 ### RemoveDuplicates()
 -Removes any duplicates iteratively
+
 -Will keep the first occurence and remove all others
+
+-Returns resolved instance afterwards
+
+# **TO BE ADDED**
 
 ### MergeSort()
 -Sorts the linked list using the merge sort algorithim
 
 Info:
 
-    Time Complexity: xx
+    Worst/Avg/Best Time Complexity: (n log n)
 
-    Space Complexity: Xx
-
+    Space Complexity: O(n)

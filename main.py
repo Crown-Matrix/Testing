@@ -692,10 +692,6 @@ class linked_list():
 ll = linked_list.CreateFromList([0,1,4,5,6,8,10,15,270])
 other_ll = linked_list.CreateFromList([0,7,9,10,11,14,19,27,15,269])
 var = ll.MergeWith(other_ll,SortCheck=True)
-if type(var) == type("s"):
-    print (var)
-else:
-    print (var.convert_to_list())
 
 
 
