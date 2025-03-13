@@ -3,7 +3,10 @@
     <head>
      <title>Project Resume</title>
      <style>    
-     
+     html {
+       border: 8px solid black;
+       border-radius: 20px;
+     }
      .intro {
       text-align:center;
      }
@@ -15,34 +18,45 @@
     
     .info {
       background-color: gray;
-      scale: 0.95;
+      scale: 95%;
       color: white
     }
     
     #about-me-table{
         border: 5px solid #0D0D0D;
         background: #D3D3D3;
-        text-anchor: center;
         text-align: center;
         margin: auto;
         align-content: center;
-        -border-collapse: collapse;
+        <!--border-collapse: collapse;-->
     }
 
-    .about-me-table-children {
-      border: 1px solid #0D0D0D
+    #about-me-table th, td {
+      border: 1px solid #0D0D0D;
     }
     
+    #about-me-table li {
+      text-align: left;
+    }
     
     body {
-      border-color: black;
+      border 10px solid black;
       padding: 50x;
+      background: #f5f4f0;
+      margin: auto;
+      max-width: 1050px;
+      min-width: 610px;
     }
     
     
-    .seperator {
-      background: 5;
-      background-color: black
+    .dotted-black-line{
+      color: solid black;
+      border-top: 10px dotted black;
+      width: 95%;
+    }
+    
+    #why-im-here {
+      scale: 95%;
     }
     </style>
   </head>
@@ -60,23 +74,28 @@
       </p>
     </div>
     <div>
-      <table id="about-me-table" style="scale: auto">
+      <table id="about-me-table" style="scale: auto" width=95%>
         <thead>
           <tr>
-            <th class="about-me-table-children">Birthday</th>
-            <th class="about-me-table-children">Work Experience</th>
-            <th class="about-me-table-children">Education</th>
+            <th>Birthday</th>
+            <th>Work Experience</th>
+            <th>Education</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td class="about-me-table-children">March 9 2008</td>
-            <td class="about-me-table-children">3 years of work experience at Mathnasium Math tutoring service</td>
-            <td class="about-me-table-children">
+            <td>March 9 2008</td>
+            <td>
               <ul>
-                <li style="text-align:left">7-8th Grade: Keller Middle School</li>
-                <li style="text-align:left">9-12th Grade: Harvest Christian Academy</li>
-                <li style="text-align:left">Software Engineering Masters: Harvard</li>
+                <li>Various projects that of which can be found at my <a href="https://github.com/Crown-Matrix" target="_blank"><u>public GitHub account</u></a></li>
+                <li>3 years of work experience at Mathnasium: An innovative math tutoring service</li>
+              </ul>
+              </td>
+            <td>
+              <ul>
+                <li>7-8th Grade: Keller Middle School</li>
+                <li>9-12th Grade: Harvest Christian Academy</li>
+                <li>Software Engineering Masters: Harvard</li>
               </ul>
             </td>
           </tr>
@@ -84,9 +103,15 @@
       </table>
     </div>
     <br>
-  <div class="seperator">
-  <br>
-  </div>
+ <hr class="dotted-black-line">
+ <div id="why-im-here">
+   <h3 style="text-align:center" id="black-underline">Why Im Here</h3>
+   <p>
+      I've always loved the idea of building things out of smaller pieces. Whether it was a 1st grader discovering legos, a 3rd grader discovering Scratch.edu, or an 11th grader deciding to pursue his dream career.
+      Working at Sigma Inc. would be an amazing oppurtunity to grow and learn with. Work experience is something that is built from the ground up, held together by willingness to learn and commitment to creating innovative things.
+      Sigma Inc understands that coding is the future, and the future can't be achieved alone. We need the help of developers that will take the time to learn and adapt to the changing world of technology around us. I am ready to be a part of the future.
+   </p>
+ </div>
   
   
   </body>
