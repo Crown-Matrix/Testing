@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+    <head>
+     <title>Project Resume</title>
+     <style>    
+     
+     .intro {
+      text-align:center;
+     }
+     
+    #black-underline {
+      text-decoration-color: black;
+      text-decoration: underline;
+    }
+    
+    .info {
+      background-color: gray;
+      scale: 0.95;
+      color: white
+    }
+    
+    #about-me-table{
+        border: 5px solid #0D0D0D;
+        background: #D3D3D3;
+        text-anchor: center;
+        text-align: center;
+        margin: auto;
+        align-content: center;
+        -border-collapse: collapse;
+    }
+
+    .about-me-table-children {
+      border: 1px solid #0D0D0D
+    }
+    
+    
+    body {
+      border-color: black;
+      padding: 50x;
+    }
+    
+    
+    .seperator {
+      background: 5;
+      background-color: black
+    }
+    </style>
+  </head>
+  
+ 
+  
+  
+  <body>
+    <div class="intro">
+      <h1 id="black-underline">Project Resume</h1>
+      <h4>Daniel Sandoval</h4>
+      <br>
+      <p class="info">
+        17 years old | Software Engineering Masters | Python,html,css,javascript
+      </p>
+    </div>
+    <div>
+      <table id="about-me-table" style="scale: auto">
+        <thead>
+          <tr>
+            <th class="about-me-table-children">Birthday</th>
+            <th class="about-me-table-children">Work Experience</th>
+            <th class="about-me-table-children">Education</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="about-me-table-children">March 9 2008</td>
+            <td class="about-me-table-children">3 years of work experience at Mathnasium Math tutoring service</td>
+            <td class="about-me-table-children">
+              <ul>
+                <li style="text-align:left">7-8th Grade: Keller Middle School</li>
+                <li style="text-align:left">9-12th Grade: Harvest Christian Academy</li>
+                <li style="text-align:left">Software Engineering Masters: Harvard</li>
+              </ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <br>
+  <div class="seperator">
+  <br>
+  </div>
+  
+  
+  </body>
+  </html>
