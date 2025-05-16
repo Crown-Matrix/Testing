@@ -5,24 +5,31 @@ def factorial(x: int) -> int:
     return a
 
 
-def numerize(x) -> any:
+def numerize(x: any) -> any:
     """
-        returns string input in integer type if possible
+    returns string input in integer type if possible
         if not then in float type
         if not that then just left as is
+
+        notice: does not work with complex due to the ambguitiy of the presence of j
+    """
+    #example cases:
+    """
+    '2.000000'
+    '2.0'
+    '2'
+    2.0000
+    2.0
+    2
     """
     try:
-        if float(x) == int(x): ## if x can be int and float, then its int
-            return int(x)
-        else:
-            return float(x)
+        x = float(x)
     except:
-        try:
-            x = float(x)
-        except:
-            pass
-        finally:
-            return x
+        return x #if it cant even be converted to a float then it aint numeric
+    if int(x) == float(x):
+        return int(x)
+    else:
+        return float(x)
         
 
 def pi_reducer(x) -> float:
@@ -47,7 +54,7 @@ def sine(x,n=50) -> float:
         sign *= -1
     return result
 
-def cosecant(x,n=50):
+def cosecant(x,n=50) -> float:
     return (1/sine(x,n))
 
 def sine_method_for_pi(accuracy=10000) -> float:
@@ -248,7 +255,7 @@ def e_exp_taylor(x,n=150):
     return result
 
 def e_exp_eval(x):
-    e = 2.718281828459045
+    e = 2.7182818284590452353602
     return e**x
 
 
@@ -257,6 +264,9 @@ def eix(x,n=50):
     return (cosine(x,n) + sine(x,n)*1j)
 
 def ln_taylor(x,n=200):
+    """
+    THIS IS A SUB FUNCTION. NOT TO BE USED ON ITS OWN
+    """
     if x == 0:
         raise ZeroDivisionError("ln(0) is undefined")
     #configure input
@@ -276,6 +286,8 @@ def ln_taylor(x,n=200):
 
 def ln_arctanh_taylor(x,n=200) -> float:
     """
+    THIS IS A SUB FUNCTION. NOT TO BE USED ON ITS OWN
+
     best for 0.05 < x < 35
 
     no higher than 39
@@ -386,9 +398,6 @@ def ln(x,n=200) -> float:
         return 1.0
     else:
         return answer
-        
-
-
 
 def polar_form(x: complex,output_type = 1):
     """
@@ -417,34 +426,81 @@ def polar_form(x: complex,output_type = 1):
             return [modulus,theta]
         case _:
             raise ValueError("invalid output type")
+
+
+def a_root(x,a=2,n=200):
+    match x<0:
+        case True:
+            result = e_exp_eval(ln(-x,n)/a)
+            validated_result = validate_round(result)
+            if validate_round(result**a) == -x:
+                return result * 1j
+            else:
+                return validated_result * 1j
+        case False:
+            result = e_exp_eval(ln(x,n)/a)
+            validated_result = validate_round(result)
+            if validate_round(result**a) == x:
+                return result
+            else:
+                return validated_result
+
+
+def validate_round(actual,SENSITIVITY=4) -> float:
+    """
+    input a number to be approximated if possible by leading 9's or 0's(sensitivity arg)
+    intended for usage to detect floating point errors
+
+    """
+    if isinstance(actual,complex):
+        return complex(real=validate_round(actual.real),imag=(validate_round(actual.imag)))
+    #attempt round down
+    floor = int(actual)
+    if actual - floor < (10**-(SENSITIVITY+1)):
+        return floor
+    
+    #attempt round up
+    ceiling = int(actual + 1)
+    if ceiling - actual < (10**-(SENSITIVITY+1)):
+        return ceiling
+    
+    # floating 9s check
+
+    str_list = list(reversed(str(actual)))
+    counter = 0 #counts current amount of nines
+    for i in range(len(str_list)):
+        if str_list[i] == "9":
+          counter += 1
+        else:
+            if counter > SENSITIVITY and str_list[i] != ".":
+                str_list[i] = str(int(str_list[i]) + 1)
+                for j in range(i):
+                    str_list[j] = "0" if str_list[j] != "." else "." #this if statement prevents the period from being replaced with a zero
+            counter = counter if str_list[i] == "." else 0
+    result = "".join(reversed(str_list))
+    result = numerize(result)
+
+    # floating zeros check
+
+    str_list = list(str(result))
+    try:
+        start = str_list.index(".")
+    except:
+        return result #if its not a decimal then theres no float to check
+    counter = 0
+    for i in range(start,len(str_list)):
+        if str_list[i] == "0":
+            counter += 1
+        else:
+            if counter > SENSITIVITY:
+                for j in range(i,len(str_list)):
+                    str_list[j] = "0"
+                return numerize("".join(str_list))
+            counter = 0
+    return numerize(result)
+
 while True:
-    xaa = numerize(input("enter ln: "))
+    xaa = numerize(input("enter sqrt: "))
     if xaa == 'cancel':
         break
-    print (ln(xaa))
-
-
-def small_decimal_rationalization(x):
-    """
-    example case:
-
-    we are given 0.0126
-
-    1/0.0126 is 79.3650793561...
-
-    so we use the log property: ln(x) = -ln(1/x)
-    then ln(0.0126) = -ln(79.3650793561)
-    which is far easier for the taylor series to calculate
-    """
-
-if False:
-    divisor_amount = 0
-    while x - 1 >= 0.125:
-        divisor_amount += 1
-        x /= 2
-    if divisor_amount != 0:
-        ln_sum[0] /= (divisor_amount*2)
-        ln_sum.append(divisor_amount*2)
-    else:
-        pass
-        #retu
+    print (validate_round(a_root(xaa)))
