@@ -11,16 +11,7 @@ def numerize(x: any) -> any:
         if not then in float type
         if not that then just left as is
 
-        notice: does not work with complex due to the ambguitiy of the presence of j
-    """
-    #example cases:
-    """
-    '2.000000'
-    '2.0'
-    '2'
-    2.0000
-    2.0
-    2
+        notice: not made for complex class due to the ambguitiy of the presence of "j"
     """
     try:
         x = float(x)
@@ -191,7 +182,7 @@ def secant(x,n=50) -> float:
     return (1/cosine(x,n))
 
 def combination(x,y):
-    "formula = n! all divded by k! * (n-k)!"
+    "formula = n! divded by (k! * (n-k)!)"
     
     #example case: 10, 5
     if y == 0 or x==y:
@@ -294,6 +285,8 @@ def ln_arctanh_taylor(x,n=200) -> float:
     no lower than 0.02
 
     its way worse if its too low
+
+    the ln convergence expansion algorithim keeps it within its optimal range anyway
     """
     if x <= 0:
         raise ValueError("invalid domain for the arctanh definition on ln(x)")
@@ -325,12 +318,26 @@ def ln(x,n=200) -> float:
     """
     computes natural log of x using arctanh taylor series and a log expansion algoithim
 
+    features:
+    convergence optimization
+    large input simplification in terms of modulus * 5000**x
+    small input optization through reciprocation
 
-    you dont have to worry about extreme small/large values being inaccurate
-    the only limit is your CPU
     """
+    # EDIT #
+    # BIG INPUT HANDLER #
+    def ln_reducer(x) -> float: # for value reduction NOT for accuracy
+        #determine how many parts to cut value into
+        #we want all inputs to be <5000
+        parts = x//5000
+        reducible = parts * 5000
+        ln_reducible = ln(5000) + ln(parts)
+        return ln(x/reducible) + ln_reducible
+        
+    if x > 5000:
+        return ln_reducer(x)
 
-    def ln_expansion(x: list) -> list:
+    def ln_expansion(x: list) -> list: #for accuracy NOT for value reduction
         """
         expected input is a list of ints/floats that of which are all less than 2
         EXCEPT the last one which will be reduced by adding another terms into the list
@@ -398,6 +405,9 @@ def ln(x,n=200) -> float:
         return 1.0
     else:
         return answer
+def a_log(x,a=10,n=200) -> float:
+    #little too simple to rlly comment on
+    return (ln(x,n)/ln(a,n))
 
 def polar_form(x: complex,output_type = 1):
     """
@@ -432,26 +442,133 @@ def a_root(x,a=2,n=200):
     match x<0:
         case True:
             result = e_exp_eval(ln(-x,n)/a)
-            validated_result = validate_round(result)
-            if validate_round(result**a) == -x:
+            validated_result = validate_round2(result)
+            if validate_round2(result**a) == -x:
                 return result * 1j
             else:
                 return validated_result * 1j
         case False:
             result = e_exp_eval(ln(x,n)/a)
-            validated_result = validate_round(result)
-            if validate_round(result**a) == x:
+            validated_result = validate_round2(result)
+            if validate_round2(result**a) == x:
                 return result
             else:
                 return validated_result
 
 
-def validate_round(actual,SENSITIVITY=4) -> float:
+def validate_round2(actual,SENSITIVITY=4) -> any:
+    """
+    input a number to be approximated if possible by leading 9's or 0's(sensitivity arg)
+    intended for detecting floating point errors
+
+    sensitivity is more of an index rather than a count for leading zero amounts
+
+    NEW VERSION - ATTEMPTS TO DETECT CASES IN WHICH USER EXPECTS AN OUTPUT OF LEADING ZEROS/NINES - EXPECTED CASE
+    barely any false positives with leading nines
+    mild false positivies with leading zeros, since zero floating point errors are identical to EXPECTED CASES
+    leading zero false positives cannot be accounted for without knowing the context of the number.
+    which this function attempts to be able to work without
+    """
+
+    if actual < 0:
+        return -validate_round2(-actual)
+    #cuz the "<"  in the floor/ceiling rounding logic gets messed up
+    #the most program efficient fix was realizing that rounding itself is an odd function by definition
+    #odd function ---> -f(x) = f(-x)
+    if isinstance(actual,complex):
+        return complex(real=validate_round2(actual.real),imag=(validate_round2(actual.imag)))
+    #attempt round down
+    floor = int(actual)
+    if actual - floor < (10**-(SENSITIVITY+3)):
+        return floor
+    
+    #attempt round up
+    ceiling = int(actual + 1)
+    if ceiling - actual < (10**-(SENSITIVITY+3)):
+        return ceiling
+    
+    
+    try:
+        str_list = list(str(actual))
+        start = str_list.index(".")
+    except:
+        return numerize(actual) #cant detect a floating error if it aint a float.
+    
+
+    # floating zeros check
+    def zero_check(actual):
+        str_list = list(str(actual))
+        counter = 0
+        for i in range(start,len(str_list)):
+            if str_list[i] == "0":
+                counter += 1
+            else:
+                if counter > SENSITIVITY-2:
+                    for j in range(i,len(str_list)):
+                        str_list[j] = "0"
+                    return numerize("".join(str_list)) #if floating zeros detected a floating nine check is
+                counter = 0
+        return "".join(str_list)
+    
+    # floating 9s check
+    def nine_check(actual):
+        str_list = list(reversed(str(actual)))
+        counter = 0 #counts current amount of nines
+        for i in range(len(str_list)):
+            if str_list[i] == "9":
+                counter += 1
+            else:
+                if counter > SENSITIVITY-1 and str_list[i] != ".":
+                    str_list[i] = str(int(str_list[i]) + 1)
+                    for j in range(i):
+                        str_list[j] = "0" if str_list[j] != "." else "." #this if statement prevents the period from being replaced with a zero
+                    return numerize("".join(reversed(str_list)))
+                counter = counter if str_list[i] == "." else 0
+        return "".join(reversed(str_list))
+    SENSITIVITY_ZEROS = "".join(["0" for i in range(SENSITIVITY-1)])
+    SENSITIVITY_NINES = "".join(["9" for i in range(SENSITIVITY)])
+    try:
+        zeros = True
+        zero = (str(actual)).index(SENSITIVITY_ZEROS)
+    except:
+        zeros = False
+        zero = len(str(actual)) + 2
+    try:
+        nines = True
+        nine = (str(actual)).index(SENSITIVITY_NINES)
+    except:
+        nines = False
+        nine = len(str(actual)) + 2
+    if zero == nine: #this case means theres no leading zeros/nines meaning no floating point error detected
+        return numerize(actual)
+    elif zeros and nines: #ex 12.99999000001 {sensitivity = 4}
+        if zero < nine:
+            return numerize(nine_check(actual))
+        else:
+            return numerize(zero_check(actual))
+    elif zero < nine:
+        return numerize(zero_check(actual))
+    else: #zero > nine
+        return numerize(nine_check(actual))
+
+
+    
+
+
+
+def validate_round(actual,SENSITIVITY=4) -> any:
     """
     input a number to be approximated if possible by leading 9's or 0's(sensitivity arg)
     intended for usage to detect floating point errors
 
+    OLDER VERSION - DOES NOT ACCOUNT FOR CASES IN WHICH USER EXPECTS AN OUTPUT OF LEADING ZEROS/NINES
     """
+
+    if actual < 0:
+        return -validate_round(-actual)
+    #cuz the "<"  in the floor/ceiling rounding logic gets messed up
+    #the most program efficient fix was realizing that rounding itself is an odd function by definition
+    #odd function ---> -f(x) = f(-x)
     if isinstance(actual,complex):
         return complex(real=validate_round(actual.real),imag=(validate_round(actual.imag)))
     #attempt round down
@@ -465,7 +582,7 @@ def validate_round(actual,SENSITIVITY=4) -> float:
         return ceiling
     
     # floating 9s check
-
+    
     str_list = list(reversed(str(actual)))
     counter = 0 #counts current amount of nines
     for i in range(len(str_list)):
@@ -495,12 +612,14 @@ def validate_round(actual,SENSITIVITY=4) -> float:
             if counter > SENSITIVITY:
                 for j in range(i,len(str_list)):
                     str_list[j] = "0"
-                return numerize("".join(str_list))
+                #return numerize("".join(str_list))
+                result = ("".join(str_list))
+                break
             counter = 0
     return numerize(result)
 
-while True:
-    xaa = numerize(input("enter sqrt: "))
-    if xaa == 'cancel':
-        break
-    print (validate_round(a_root(xaa)))
+#while True:
+#    xaa = numerize(input("enter special validation: "))
+#    if xaa == 'cancel':
+#        break
+#    print (validate_round2((xaa)))
