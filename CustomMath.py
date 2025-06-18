@@ -145,19 +145,99 @@ def isComposite(x: int) -> bool:
     return False
 
 
-def reimann_integral(func,lower_bound,upper_bound,h=0.00001) -> float:
-    sum = 0
-    negative_integral = False
-    if lower_bound > upper_bound:
-        lower_bound,upper_bound = upper_bound,lower_bound #swap if wrong order detected
-        negative_integral = True #still accounts for negativity
-    elif lower_bound == upper_bound:
-        return 0
-    while lower_bound < upper_bound:
-        sum += (func(lower_bound)*h)
-        lower_bound += h
-    return sum if not negative_integral else -sum
+def reimann_integral(func,lower_bound,upper_bound,orientation: int,h=0.0005) -> float:
+    """
+    numerically evaluates the given function with specified orientation type
 
+    orientation types:
+    1. left (fast general)
+    2. right (fast general)
+    3. midpoint (general)
+    4. trapezoidal (linear)
+    5. simpson (curves)
+    """
+    match orientation:
+
+        case 1:
+            sum = 0
+            negative_integral = False
+            if lower_bound > upper_bound:
+                lower_bound,upper_bound = upper_bound,lower_bound #swap if wrong order detected
+                #iteration method requires correct order
+                negative_integral = True #still accounts for negativity
+            elif lower_bound == upper_bound:
+                return 0
+            while lower_bound < upper_bound:
+                sum += (func(lower_bound)*h)
+                lower_bound += h
+            return sum if not negative_integral else -sum #not negative integral is the more common case
+        
+        case 2:
+            sum = 0
+            negative_integral = False
+            if lower_bound > upper_bound:
+                lower_bound,upper_bound = upper_bound,lower_bound
+                negative_integral = True
+            elif lower_bound == upper_bound:
+                return 0
+            while lower_bound < upper_bound:
+                lower_bound += h
+                sum += func(lower_bound) * h
+            return sum if not negative_integral else -sum
+        
+        case 3:
+            sum = 0
+            negative_integral = False
+            if lower_bound > upper_bound:
+                lower_bound,upper_bound = upper_bound,lower_bound
+                negative_integral = True
+            elif lower_bound == upper_bound:
+                return 0
+            while lower_bound < upper_bound:
+                midpoint = lower_bound + (h/2)
+                sum += func(midpoint) * h
+                lower_bound += h
+            return sum if not negative_integral else -sum
+        
+        case 4:
+            sum = 0
+            negative_integral = False
+            if lower_bound > upper_bound:
+                lower_bound,upper_bound = upper_bound,lower_bound
+                negative_integral = True
+            elif lower_bound == upper_bound:
+                return 0
+            while lower_bound < upper_bound:
+                trap_line = (func(lower_bound) + func(lower_bound+h))/2
+                sum += trap_line * h
+                lower_bound += h
+            return sum if not negative_integral else -sum
+            
+        case 5:
+            sum = 0
+            negative_integral = False
+            if lower_bound > upper_bound:
+                lower_bound,upper_bound = upper_bound,lower_bound
+                negative_integral = True
+            elif lower_bound == upper_bound:
+                return 0
+            while lower_bound + 2*h <= upper_bound:
+                parabola_area = (func(lower_bound) + func(lower_bound+h)*4 + func(lower_bound + 2 * h)) * (h/3)
+                sum += parabola_area
+                lower_bound += 2 * h
+            #handle any left overs less than 2 * h
+            #using trapezoidal rule
+            while lower_bound < upper_bound:
+                h = min(h,upper_bound-lower_bound)
+                trap_line = (func(lower_bound) + func(lower_bound+h))/2
+                sum += trap_line * h
+                lower_bound += h
+            return sum if not negative_integral else -sum
+        
+        case _:
+            raise TypeError("integer between 1-5 expected for integral orientation type")
+        
+            
 
 def cosine(x,n=50) -> float:
     # approx 15-16 digit accuracy
@@ -327,11 +407,21 @@ def ln(x,n=200) -> float:
     # EDIT #
     # BIG INPUT HANDLER #
     def ln_reducer(x) -> float: # for value reduction NOT for accuracy
+        
         #determine how many parts to cut value into
         #we want all inputs to be <5000
+        
+        
+        ALLOWED = True
+        #but i also have to decide if using one precomputed value is cheating or not
+        #cuz the whole point of this module was using arbituary operations without any "cheating"
+        #set ALLOWED to false if you wanna run the code without having the precomputed value of ln(5000)
+        #it'll stil find it, just takes a little while longer
+        #decent difference in the seconds of time. one precomputed value can make a massive difference
+        ln5000_val = 8.517193191416238211235100 if ALLOWED else ln(5000)
         parts = x//5000
         reducible = parts * 5000
-        ln_reducible = ln(5000) + ln(parts)
+        ln_reducible = ln5000_val + ln(parts)
         return ln(x/reducible) + ln_reducible
         
     if x > 5000:
@@ -461,7 +551,7 @@ def validate_round2(actual,SENSITIVITY=4) -> any:
     input a number to be approximated if possible by leading 9's or 0's(sensitivity arg)
     intended for detecting floating point errors
 
-    sensitivity is more of an index rather than a count for leading zero amounts
+    sensitivity is more of an index rather than a simple count for leading zero amounts
 
     NEW VERSION - ATTEMPTS TO DETECT CASES IN WHICH USER EXPECTS AN OUTPUT OF LEADING ZEROS/NINES - EXPECTED CASE
     barely any false positives with leading nines
@@ -541,7 +631,7 @@ def validate_round2(actual,SENSITIVITY=4) -> any:
         nine = len(str(actual)) + 2
     if zero == nine: #this case means theres no leading zeros/nines meaning no floating point error detected
         return numerize(actual)
-    elif zeros and nines: #ex 12.99999000001 {sensitivity = 4}
+    elif zeros and nines: #ex 12.09999900001 {sensitivity = 4}
         if zero < nine:
             return numerize(nine_check(actual))
         else:
@@ -618,8 +708,157 @@ def validate_round(actual,SENSITIVITY=4) -> any:
             counter = 0
     return numerize(result)
 
-#while True:
-#    xaa = numerize(input("enter special validation: "))
-#    if xaa == 'cancel':
-#        break
-#    print (validate_round2((xaa)))
+
+def gcf(a,b):
+    #euclidean algorithim implementation
+    while(b):
+        a, b = b, a % b
+    return a
+def gcf_list(array: list) -> any:
+    """
+    example input:
+    [a,b,c,d,e,f]
+    recursively split into nested subarrays of len 2
+    iter 1 - [[a,b],[c,d],[e,f]]
+    iter 2 - [   [[a,b] , [c,d]],    [e,f]    ]
+    we now have 2 numbers
+    gcf([a,b],[c,d]) and gcf(e,f)
+    get the final gcf of those 2 numbers
+    answer = gcf(gcf([a,b],[c,d]),gcf([e,f]))
+    """
+    match len(array):
+        case 0:
+            return None
+        case 1:
+            return array if not isinstance(array,list) else array[0]
+        case 2:
+            return gcf(array[0],array[1])
+    counter = 0
+    current_list_storage = []
+    final_list = []
+    for i in array:
+        counter += 1
+        current_list_storage.append(i)
+        if counter == 2:
+            final_list.append(current_list_storage)
+            current_list_storage = []
+            counter = 0
+    if current_list_storage:
+        current_list_storage.append(0)
+        final_list.append(current_list_storage)
+    return gcf_list([gcf(i[0],i[1]) for i in final_list])
+def lcm(a,b):
+    """
+    if 0 is given, returns the other number.
+    if both inputs are zero, returns zero
+    """
+    original_a = a
+    a,b = abs(a),abs(b)
+    if b > a:
+        a,b = b,a
+    if b == 0:
+        return original_a
+    return numerize((a*b)/gcf(a,b))
+def lcm_list(array: list):
+    match len(array):
+        case 0:
+            return None
+        case 1:
+            return array if not isinstance(array,list) else array[0]
+        case 2:
+            return lcm(array[0],array[1])
+    counter = 0
+    current_list_storage = []
+    final_list = []
+    for i in array:
+        counter += 1
+        current_list_storage.append(i)
+        if counter == 2:
+            final_list.append(current_list_storage)
+            current_list_storage = []
+            counter = 0
+    if current_list_storage:
+        current_list_storage.append(0)
+        final_list.append(current_list_storage)
+    return lcm_list([lcm(i[0],i[1]) for i in final_list])
+
+def floor(x):
+    return int(x-1) if x < 0 else int(x)
+    
+def ceiling(x):
+    if int(x) == float(x):
+        return int(x)
+    else:
+        if x < 0:
+            return int(x)
+        return int(x) + 1
+def radify(degrees):
+    """
+    converts degrees input to radians
+    """
+    pi = 3.141592653589793238462643383279
+    return degrees * (pi/180)
+def degreeify(radians):
+    """
+    converts radian input to degrees
+    """
+    pi = 3.141592653589793238462643383279
+    return radians * (180/pi)
+
+
+def lanczos_gamma(z,recursion=False):
+    # Coefficients for Lanczos approximation
+    p = [
+        0.99999999999980993,
+        676.5203681218851,
+       -1259.1392167224028,
+        771.32342877765313,
+       -176.61502916214059,
+        12.507343278686905,
+       -0.13857109526572012,
+        9.9843695780195716e-6,
+        1.5056327351493116e-7
+    ]
+    if z == int(z) and z <= 0:
+        raise ValueError("non positive integers are not defined in the gamma function")
+    if z < 0.5:
+        #Reflection formula (for small inputs)
+        pi = 3.141592653589793238462643383279
+        return pi / (sine(pi * z) * lanczos_gamma(1 - z))
+
+    #lanczos sum
+    z -= 1
+    x = p[0]
+    for i in range(1, len(p)):
+        x += p[i] / (z + i)
+
+    t = z + 7.5
+    sqrt_two_pi = 2.5066282746310007    # sqrt(2pi)
+    answer = sqrt_two_pi * (t ** (z + 0.5)) * e_exp_eval(-t) * x
+    return answer
+
+
+def gamma(x, recursion=False):
+    """
+    not fully accurate but pretty close
+    uses lanczos approximation, reflection formula, and iterative input decomposition(for accuracy purposes)
+    """
+    if x >= 172:
+        raise OverflowError(f"{x} is outside the conventional gamma performance domain")
+    if x < 2:
+        result = lanczos_gamma(x)
+    else:
+        factor = 1
+        while x > 2:
+            x -= 1
+            factor *= x
+        result = lanczos_gamma(x) * factor
+
+    if not recursion:
+        #rounds answer to expected accuracy range
+        ROUND_AMT = 3
+        result = round(result, len(str(result)) - 1 - (ROUND_AMT + len(str(int(result)))))
+        return float(validate_round2(result))
+    else:
+        return result
+
