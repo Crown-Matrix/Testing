@@ -1,3 +1,4 @@
+from random import shuffle
 class node():
     def __init__(self,data,next=None):
         self.data = data
@@ -484,7 +485,6 @@ class linked_list():
                 previous_node = previous_node.next
                 current_node = current_node.next
             if applicable:
-                print ("Completed in",counter,"steps")
                 break
                 
     def findMin(self,method):
@@ -523,7 +523,7 @@ class linked_list():
                 case 2: #return node data
                     return latest_node.data
                 case _:
-                    return "invalid method input"               
+                    return "invalid method input"
     def SelectionSort(self):
         """
         Directly Changes linked_link instance using the SelectionSort Algorithim
@@ -555,6 +555,7 @@ class linked_list():
         Methods:
         1: Returns new linked list object containing data from the first half
         2: Returns new linked list object containing data from the second half
+        3: Returns both new deep copied halves in a [x,y] list
         """
         first_node = self.head.next
         if first_node == None or first_node.next == None:
@@ -592,6 +593,25 @@ class linked_list():
                     new_list.append(current_node.data)
                     current_node = current_node.next
                 return new_list
+            case 3:
+                fast_counter = self.head.next
+                slow_counter = self.head.next
+                while fast_counter != None and fast_counter.next != None and fast_counter.next.next != None: ## floor divison by 2
+                    fast_counter = fast_counter.next.next
+                    slow_counter = slow_counter.next
+                second_half_head = slow_counter.next # save second half before split
+                slow_counter.next = None #split the halves
+                current_node = self.head.next
+                new_first_list = linked_list()
+                new_second_list = linked_list()
+                while current_node != None:
+                    new_first_list.append(current_node.data)
+                    current_node = current_node.next
+                current_node = second_half_head
+                while current_node != None:
+                    new_second_list.append(current_node.data)
+                    current_node = current_node.next
+                return [new_first_list,new_second_list]
             case _:
                 "Invalid Method Input"         
     def __iter__(self):
@@ -653,7 +673,6 @@ class linked_list():
             current_node = current_node.next
         return True
 
-
     def MergeWith(self,second_list,SortCheck=True):
 
         if type(second_list) != linked_list:
@@ -665,8 +684,7 @@ class linked_list():
         if self.head.next == None:
             return second_list
         elif second_list.head.next == None:
-            return self
-        #above handles case of one of the lists being empty (will just return the other one)
+            return self #above handles case of one of the lists being empty (will just return the other one)
         new_list = linked_list()
         first_current = self.head.next
         second_current = second_list.head.next
@@ -713,10 +731,161 @@ class linked_list():
             previous_node = current_node
             current_node = current_node.next
         return self
+    
+    def slicer(self, start: int,end: int,step: int):
+
+        MAX_BUFFER_SIZE = 50
+        #if negative slicing index, buffer method is used if within range of max
+        def negative_slice_iter(index):
+            k = abs(index)
+            if k <= MAX_BUFFER_SIZE:
+                #buffer method used
+                buffer_array = []
+                current_node = self.head
+                while current_node != None:
+                    buffer_array.append(current_node)
+                    if len(buffer_array) > MAX_BUFFER_SIZE:
+                        buffer_array.pop(0)
+                    current_node = current_node.next
+                current_node = buffer_array[0]
+            else:
+                start = self.length()-k
+                current_node = self.head
+                for _ in range(start+1):
+                    current_node = current_node.next
+            return current_node
+        if start == None:
+            start = 0
+        copied = linked_list()
+        tail = copied.head
+
+        if step == 0:
+            raise ValueError("slicing step can't be zero")
+
+        #iterate to start,after: current_node = node at index start
+        if start >= 0:
+            current_node = self.head
+            for _ in range(start+1):
+                current_node = current_node.next
+        else: #negative slicing
+            current_node = negative_slice_iter(start)
+        
+        if end < 0:
+            end = self.length()+end+1
+
+        if step > 0: #positive step
+            idx = start
+            while current_node is not None and idx < end:
+                tail.next = node(current_node.data)
+                tail = tail.next
+                # advance step times
+                for _ in range(step):
+                    if current_node is not None:
+                        current_node = current_node.next
+                        idx += 1
+                    else:
+                        break
+        else: #negative step
+            # collect all nodes into a list for reverse traversal cuz no way a single way linked list is gonna be negatively transversed
+            # if we have to iterate through either way, must as well create a list
+            nodes = []
+            temp_node = self.head.next
+            while temp_node is not None:
+                nodes.append(temp_node)
+                temp_node = temp_node.next
+            length = len(nodes)
+            s = start if start is not None else length - 1
+            e = end if end is not None else -1
+            if s < 0:
+                s += length
+            if e < 0:
+                e += length
+            idx = s
+            while idx > e and idx >= 0 and idx < length:
+                tail.next = node(nodes[idx].data)
+                tail = tail.next
+                idx += step
+        return copied
+
+    def __getitem__(self,index: int | slice):
+        if isinstance(index,int):
+            index = int(index)
+            return self.IndexData(index)
+        elif isinstance(index,slice):
+            return self.slicer(index.start,index.stop,index.step) #TODO
+        else:
+            raise TypeError("Integer or Slice object expected")
+            
+    
+    
+    def shallow_copy(self):
+        shallow_copied_head = linked_list()
+        shallow_copied_tail = shallow_copied_head.head
+        current_node = self.head.next
+        while current_node is not None:
+            shallow_copied_tail.next = node(current_node.data)
+            shallow_copied_tail = shallow_copied_tail.next
+            current_node = current_node.next
+        return shallow_copied_head
+
+    def merge_sort(self):
+        """
+        Returns sorted shallow copy of linked list instance
+        """
+        if self.head.next is None or self.head.next.next is None:
+            return self.shallow_copy()
+        ll_halves = self.SplitList(method=3)
+        first_half: linked_list = ll_halves[0]
+        second_half: linked_list = ll_halves[1]
+
+        first_half = first_half.merge_sort()
+        second_half = second_half.merge_sort()
+
+        def merge(list1: linked_list, list2: linked_list):
+            current_node_1 = list1.head.next
+            current_node_2 = list2.head.next
+
+            dummy_node = node(None)
+            tail = dummy_node
+
+            while current_node_1 is not None and current_node_2 is not None:
+                if current_node_1.data < current_node_2.data:
+                    tail.next = node(current_node_1.data)
+                    current_node_1 = current_node_1.next
+                else:
+                    tail.next = node(current_node_2.data)
+                    current_node_2 = current_node_2.next
+                tail = tail.next
+
+            while current_node_1 is not None:
+                tail.next = node(current_node_1.data)
+                tail = tail.next
+                current_node_1 = current_node_1.next
+            
+            while current_node_2 is not None:
+                tail.next = node(current_node_2.data)
+                tail = tail.next
+                current_node_2 = current_node_2.next
+            # in case of odd len(LL)
+            merged_list = linked_list() # shallow copy of head
+            merged_list.head.next = dummy_node.next # connect el data
+            return merged_list #viola (im sorry im rlly glad this worked so well)
+
+        new_list = merge(first_half, second_half)
+        return new_list
+    def shuffle(self):
+        array = self.convert_to_list()
+        shuffled_array = shuffle(array) #imported from *random*
+        return shuffled_array
+
+        
+
+    
 
 
 
-def TimeItTests(LIST_LENGTH = 150,DATA_RANGE_MINIMUM = 0, DATA_RANGE_MAXIMUM = 99999999999,TEST_AMOUNT = 100,BUBBLE_SORT=True,SELECTION_SORT=True,TIM_SORT=True):
+
+def TimeItTests(LIST_LENGTH = 150,DATA_RANGE_MINIMUM = 0, DATA_RANGE_MAXIMUM = 99999999999,TEST_AMOUNT = 100,BUBBLE_SORT=True,SELECTION_SORT=True,TIM_SORT=True,MERGE_SORT=True):
     """
     Generates random lists with defined parameters to test sorting algorithims
     Automatically prints results after
@@ -735,7 +904,6 @@ def TimeItTests(LIST_LENGTH = 150,DATA_RANGE_MINIMUM = 0, DATA_RANGE_MAXIMUM = 9
     """
     from random import randrange
     from timeit import timeit
-    from os import system
     def randomLinkedList():
         return linked_list.CreateFromList([randrange(DATA_RANGE_MINIMUM,DATA_RANGE_MAXIMUM) for i in range(LIST_LENGTH)])    
     def bubbly():
@@ -746,22 +914,34 @@ def TimeItTests(LIST_LENGTH = 150,DATA_RANGE_MINIMUM = 0, DATA_RANGE_MAXIMUM = 9
         testee.SelectionSort()
     def timmy():
         testee = randomLinkedList()
-        testee.convert_to_list().sort()
+        testee = sorted(testee.convert_to_list())
+        testee = linked_list.CreateFromList(testee)
+    def merge():
+        testee = randomLinkedList()
+        testee.merge_sort()
     print ("loading...",flush=True)
     if BUBBLE_SORT:
         apple = (timeit(stmt=bubbly,number=TEST_AMOUNT))
     else:
         apple = "Not Ran"
+    print(f"Bubble Sort: {apple}")
     if SELECTION_SORT:
         bannana = (timeit(stmt=selective,number=TEST_AMOUNT))
     else:
         bannana = "Not Ran"
+    print(f"Selection Sort: {bannana}")
     if TIM_SORT:
         orange = (timeit(stmt=timmy,number=TEST_AMOUNT))
     else:
         orange = "Not Ran"
-    system("clear")
-    print (f"Bubble Sort: {apple}\nSelection Sort: {bannana}\nTim Sort: {orange}")
+    print(f"Tim Sort: {orange}")
+    if MERGE_SORT:
+        peach = (timeit(stmt=merge,number=TEST_AMOUNT))
+    else:
+        peach = "Not Ran"
+    print(f"Merge Sort: {peach}")
+    #print (f"Bubble Sort: {apple}\nSelection Sort: {bannana}\nTim Sort: {orange}\nMerge Sort: {peach}")
     print (f"\nTest Information:\nDataRange:({DATA_RANGE_MINIMUM}-{DATA_RANGE_MAXIMUM})\nListLength: {LIST_LENGTH}\nTestAmount: {TEST_AMOUNT}")
-    print ("\nExtra note: TimSort converts the linked list to a regular list first then converts the list back into a linked_list)\n")
-pass
+    print ("\nExtra note: TimSort converts the linked list to a regular list first then converts the list back into a linked_list)")
+
+#TimeItTests(BUBBLE_SORT=False,SELECTION_SORT=False,LIST_LENGTH=2000,TEST_AMOUNT=50)

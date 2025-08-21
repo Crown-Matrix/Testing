@@ -806,7 +806,7 @@ def degreeify(radians):
     return radians * (180/pi)
 
 
-def lanczos_gamma(z,recursion=False):
+def lanczos_gamma(z):
     # Coefficients for Lanczos approximation
     p = [
         0.99999999999980993,
@@ -838,10 +838,11 @@ def lanczos_gamma(z,recursion=False):
     return answer
 
 
-def gamma(x, recursion=False):
+def gamma(x, error_round=True):
     """
     not fully accurate but pretty close
     uses lanczos approximation, reflection formula, and iterative input decomposition(for accuracy purposes)
+    error_round arg attempts to round result to the decimal digit place in which inaccuracy begins
     """
     if x >= 172:
         raise OverflowError(f"{x} is outside the conventional gamma performance domain")
@@ -854,11 +855,214 @@ def gamma(x, recursion=False):
             factor *= x
         result = lanczos_gamma(x) * factor
 
-    if not recursion:
+    if error_round:
         #rounds answer to expected accuracy range
         ROUND_AMT = 3
         result = round(result, len(str(result)) - 1 - (ROUND_AMT + len(str(int(result)))))
         return float(validate_round2(result))
     else:
         return result
+
+def user_int_input(msg):
+    """
+    convenience function for testing
+    repeatedly asks user for input until int is given
+    int written as float does NOT count
+    ex 5.0 will NOT be accepted as 5
+    """
+    while True:
+        x = input(f"{msg}")
+        try:
+            x = int(x)
+        except Exception as e:
+            print (e,end="\n\n")
+            continue
+        break
+    return x
+
+def to_custom_base(start: int, base: int) -> str:
+    """
+    function works correctly with STRICTLY INTEGER TYPE, 
+    Base must be a integer greater than positive one (int(x)>1), 
+    numerically evaluated;16 does not mean hexadecimal_format, 
+    appends base prefix if applicable in python syntax
+    irreversible if base > 10
+    """
+    negativity = False
+    if start < 0:
+        negativity = True
+        start = -start
+    mods = ""
+    while start >= base:
+               mod = start % base
+               start = start // base
+               mods += f"{mod}"
+    mods += f"{start}"
+    prefixes = {
+        2 : "0b",
+        8 : "0o",
+    }
+    if base in [2,8]:
+        mods += "".join(reversed(prefixes.get(base)))
+    final_string = "".join(reversed(mods))
+    return final_string if not negativity else "-" + final_string
+
+def from_custom_base(start: str, base: int,prefix_check=True) -> int:
+    if start != start.lstrip("0x"):
+        #if hexadecimal
+        return fromHexadecimal(start)
+    def remove_prefixs(str_n: str) -> str:
+        prefixs = ["0b","0o"]
+        for i in prefixs:
+            str_n = str_n.lstrip(i)
+        return str_n
+    if prefix_check:
+        start = remove_prefixs(start)
+    exponent = 0
+    result = 0
+    for i in reversed(start):
+        result += int(i) * base**exponent
+        exponent += 1
+    return result
+def to_custom_base_key(start: int,key: str) -> str:
+    base = len(key)
+    negativity = False # im a postive guy
+    if start < 0:
+        negativity = True
+        start = -start
+    mods = ""
+    while start > 0:
+        mod = start % base
+        start //= base
+        mods += f"{key[mod]}"
+    final_string = "".join(reversed(mods))
+    return final_string if not negativity else "-" + final_string
+
+
+
+def from_custom_base_key(start: str, key: str,case_sensitive=True) -> int:
+    negativity = True if start[0] == "-" else False
+    start = start.replace("-","",1)
+    """
+    returns base-10 integer from alphanum string with alphanum symbol key
+    case-sensitive arg is true by default
+    """
+    base = len(key)
+    key = key if case_sensitive else key.lower()
+    exponent = 0
+    result = 0
+    if case_sensitive:
+        for i in reversed(start):
+            try:
+                result += key.index(i) * base**exponent
+            except:
+                raise ValueError(f"value({i}) not found in symbol key({base}):")
+            exponent += 1
+    else:
+        for i in reversed(start):
+            try:
+                result += key.index(i.lower()) * base**exponent
+            except:
+                raise ValueError(f"value({i.lower()}) not found in symbol key({base}):")
+            exponent += 1
+    return result if not negativity else -result
+
+def toBase62(start: int) -> str:
+    symbols = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+    return to_custom_base_key(start,symbols)
+
+def fromBase62(start: str):
+    symbols = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+    return from_custom_base_key(start,symbols)
+def toHexadecimal(start: int,addprefix=False) -> str:
+    """
+    takes integer as input
+    """
+    hex_symbols = "0123456789abcdef"
+    result = to_custom_base_key(start,hex_symbols)
+    if start < 0 and addprefix:
+        result = result.replace("-","-0x",1)
+    elif addprefix:
+        result = "0x" + result
+    return result
+def fromHexadecimal(start: str,prefix_check=True) -> int:
+    """
+    return base-10 integer type from hexadecimal string
+    accepts negative inputs as either -0xff or 0x-ff
+    prefix_check enables prefix removal: only disable if you know the prefix won't be in the input
+    """
+    negativity = False
+    if start[0] == "-":
+        negativity = True
+        start = start.replace("-","",1)
+    hex_symbols = "0123456789abcdef"
+    def prefix_strip(str_strip: str) -> str:
+        return str_strip.lstrip("0x") if not negativity else "-" + str_strip.lstrip("0x")
+        return str_strip.lstrip("0x") if not negativity else "-" + str_strip.lstrip("0x")
+        return str_strip.lstrip("0x") if not negativity else "-" + str_strip.lstrip("0x")
+    start = prefix_strip(start) if prefix_check else start
+    result = from_custom_base_key(start,hex_symbols)
+    return result
+
+
+
+def stirling_approx(n,improved=True):
+    """
+    implements stirling approximation for for the factorial of x when x is large
+    stirling_approx = n! as n -> infinity
+    at least 1% accuracy after n=8
+    improved arg may take longer but for more accuracy
+    """
+    #test info for n = 170 (max edge case) to show difference between improved VS not improved
+    #0.049007538683454754% percent error after 0.41003249200002756 seconds(improved = False)
+    #0.000012010654685923328% percent error after 1.3458281109999461 seconds(improved = True)
+    #this isnt even decimal form, this is after multiplying by 100 to get to percent form
+    def sqrt(x):
+        return x**0.5
+    pi = 3.141592653589793238462643383279
+    e = 2.7182818284590452353602
+    main_approx = (sqrt(2*n*pi) * (n/e)**n)
+    if improved:
+        correction = 1+(1/(12*n))
+        return (main_approx * correction)
+        #extra correction terms
+        #scraped because yes while they made the result more accurate, they made the program take 4x as long for n=170
+        (1/(360*n**3))
+        (1/(1260*n**5))
+        (1/(1680*n**7))
+        (1/(1188*n**9))
+    else:
+        return main_approx
+#print ("0.049007538683454754 percent error after 0.41003249200002756 seconds")
+#print ("0.000012010654685923328 percent error after 1.3458281109999461 seconds")
+#print (timeit("ln(99999999999)",globals=globals()))
+#print (100 - stirling_approx(170,True)/factorial(170)*100)
+def pi_product(func, start: int, end: int,*args):
+    start = round(start)
+    end = round(end)
+    final_product = 1
+    for i in range(start,end+1):
+        final_product *= (func(i,*args))
+    return final_product
+
+def sigma_sum(func, start: int, end: int,*args):
+    start = round(start)
+    end = round(end)
+    final_sum = 0
+    for i in range(start,end+1):
+        final_sum += (func(i,*args))
+    return final_sum
+def tetration(base: int, tetra: int):
+    if tetra == 1:
+        return base
+    base **= tetration(base,tetra-1)
+    return base
+
+def pentation(base: int, penta: int):
+    if penta == 1:
+        return base
+    result = base
+    for _ in range(penta - 1):
+        result = tetration(base, result)
+    return result
 

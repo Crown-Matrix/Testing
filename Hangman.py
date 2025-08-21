@@ -28,6 +28,7 @@ def rulechecker(x,y): #y is minimum length of word
 while True:
     answer = input("Player 1, type in a word for player 2 to guess: ")
     answer = answer.lower()
+    backup_answer = answer
     answer = list(answer)
     rulechecker("".join(answer),4)
     if a>=1:
@@ -73,7 +74,7 @@ while game_over == False:
         if lives_left == 1:
             print ("Player 1 wins as Player 2 is out of lives\n")
             print ("\n")
-            print ("the answer was","".join(answer))
+            print ("the answer was",backup_answer)
             game_over = True
         if lives_left != 1:
             lives_left -= 1
@@ -85,4 +86,4 @@ while game_over == False:
         print (" ".join(known_word))
     else:
         p = "".join(known_word)
-        print ("The answer was",p)
+        print ("The answer was",backup_answer)

@@ -2,20 +2,18 @@
 <html>
     <head>
      <title>Project Resume</title>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
      <style>    
      html {
+       width: 100%;
        border: 8px solid black;
        border-radius: 20px;
+       min-height: 100vmax
      }
      .intro {
       text-align:center;
      }
-     
-    #black-underline {
-      text-decoration-color: black;
-      text-decoration: underline;
-    }
-    
     .info {
       background-color: gray;
       scale: 95%;
@@ -24,14 +22,13 @@
     
     #about-me-table{
         border: 5px solid #0D0D0D;
-        background: #D3D3D3;
+        background: linear-gradient(rgb(161, 161, 161),lightgray);
         text-align: center;
-        margin: auto;
+        margin: 0 auto;
         align-content: center;
-        <!--border-collapse: collapse;-->
     }
 
-    #about-me-table th, td {
+    #about2-me-table th, td {
       border: 1px solid #0D0D0D;
     }
     
@@ -40,33 +37,79 @@
     }
     
     body {
-      border 10px solid black;
-      padding: 50x;
-      background: #f5f4f0;
+      border: 10px solid black;
+      background-color: lightgray;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
       margin: auto;
-      max-width: 1050px;
       min-width: 610px;
+      height: 100%
     }
-    
     
     .dotted-black-line{
       color: solid black;
       border-top: 10px dotted black;
       width: 95%;
     }
+    .black-underline{
+      text-decoration-color: solid black;
+      text-decoration: underline;
+    }
     
     #why-im-here {
       scale: 95%;
     }
+    #extra-info-grid {
+      display: flex;
+      flex-direction: row;
+      overflow: auto;
+      align-items: center;
+      width: 100%;
+    }
+    #extra-info-grid div {
+   
+      border-width: 5px;
+      border-style: outset;
+      border-color: black;
+      border-radius: 10px;
+      min-width: 0.25vw;
+      margin-inline: 0.23vw;
+      width: inherit;
+      background-color: lightgray;
+
+      height: 100px;
+    }
+    #strengths {
+      text-align: left;
+      padding-left: 30px;
+      justify-content: center;
+      list-style-position: inside;
+      text-anchor: start;
+    }
     </style>
   </head>
   
- 
-  
-  
   <body>
+    <script>
+  // On page load, set body width to 50% of screen width in pixels
+  // this js script isnt mine i haven't learned any JS yet
+  // cuz i configured its supposed to be learned after html,css
+  window.addEventListener("DOMContentLoaded", () => {
+    const halfScreen = screen.width / 2;
+    document.body.style.width = halfScreen + "px";
+  });
+  </script>
+  <noscript>
+    <style>
+      body {
+        margin-left: 25vmax;
+        margin-right: 25vmax;
+        width: 100%;
+      }
+    </style>
+  </noscript>
     <div class="intro">
-      <h1 id="black-underline">Project Resume</h1>
+      <h1 class="black-underline">Project Resume</h1>
       <h4>Daniel Sandoval</h4>
       <br>
       <p class="info">
@@ -74,7 +117,7 @@
       </p>
     </div>
     <div>
-      <table id="about-me-table" style="scale: auto" width=95%>
+      <table id="about-me-table" style="width: 95%">
         <thead>
           <tr>
             <th>Birthday</th>
@@ -105,14 +148,27 @@
     <br>
  <hr class="dotted-black-line">
  <div id="why-im-here">
-   <h3 style="text-align:center" id="black-underline">Why Im Here</h3>
+   <h3 style="text-align:center" class="black-underline">Why Im Here</h3>
    <p>
       I've always loved the idea of building things out of smaller pieces. Whether it was a 1st grader discovering legos, a 3rd grader discovering Scratch.edu, or an 11th grader deciding to pursue his dream career.
       Working at Sigma Inc. would be an amazing oppurtunity to grow and learn with. Work experience is something that is built from the ground up, held together by willingness to learn and commitment to creating innovative things.
       Sigma Inc understands that coding is the future, and the future can't be achieved alone. We need the help of developers that will take the time to learn and adapt to the changing world of technology around us. I am ready to be a part of the future.
    </p>
  </div>
-  
-  
+ <div id="extra-info-grid">
+    <div id="strengths">
+      <h3>Strengths</h3>
+      <ul>
+        <li>Problem-solving</li>
+        <li>"Big Picture" thinking</li>
+      </ul>
+    </div>
+    <div style="text-align: center">
+      <h3>Letter of Recomendation</h3>
+      <p><a href="mailto:amberyounts@hcasaints.org?subject=Letter%20of%20Recomendation%20for%20Daniel%20Sandoval">amberyounts@hcasaints.org</a></p>
+    </div>
+   
+   
+ </div>
   </body>
   </html>
