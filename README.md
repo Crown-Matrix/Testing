@@ -154,6 +154,16 @@ Info:
      
     Space Complexity: O(1)
 
+### MergeSort()
+-Sorts the linked list using the merge sort algorithim
+
+Info:
+
+    Worst/Avg/Best Time Complexity: (n log n)
+
+    Space Complexity: O(n)
+
+
 ### findMax(method)
 -Returns maximum numerical value in list
 
@@ -225,13 +235,19 @@ Methods:  (Default: 1)
 
 -Returns resolved instance afterwards
 
+### Slicer(start, end,step=1)
+- Slices linked_list at given indices
+- Also called if self[x:y:z] is used
+- Returns shallow copy instance
+
+### shallow_copy()
+ - Returns shallow copy of linked list instance
+
+### shuffle()
+- shuffles list elements
+Methods:
+1.  Returns linked list instance
+2. Returns in array instead
+
 # **TO BE ADDED**
 
-### MergeSort()
--Sorts the linked list using the merge sort algorithim
-
-Info:
-
-    Worst/Avg/Best Time Complexity: (n log n)
-
-    Space Complexity: O(n)

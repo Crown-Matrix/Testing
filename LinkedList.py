@@ -732,7 +732,7 @@ class linked_list():
             current_node = current_node.next
         return self
     
-    def slicer(self, start: int,end: int,step: int):
+    def slicer(self, start: int,end: int,step: int=1):
 
         MAX_BUFFER_SIZE = 50
         #if negative slicing index, buffer method is used if within range of max
@@ -873,10 +873,24 @@ class linked_list():
 
         new_list = merge(first_half, second_half)
         return new_list
-    def shuffle(self):
+    def shuffle(self,method=1):
+        """
+        shuffles list elements
+
+        Methods:
+        1 - Returns linked list instance
+        2 - Returns in array instead
+        """
         array = self.convert_to_list()
         shuffled_array = shuffle(array) #imported from *random*
-        return shuffled_array
+        match method:
+            case 1:
+                return linked_list.CreateFromList(shuffled_array)
+            case 2:
+                return shuffled_array
+            case _:
+                raise ValueError("invalid input for method")
+        
 
         
 
