@@ -1,4 +1,4 @@
-# **Methods**
+# **Implemented Methods for Linked List**
 
 ### Prepend(data)
 -Adds given data to beginning of list
